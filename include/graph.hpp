@@ -15,7 +15,12 @@ class Graph {
         std::vector<int> shortest_uncycle_path(int,int, std::string &);
         std::vector<int> shortest_cycle_path(int, std::string &);
         bool is_vertex_cover(int, std::vector<int> &);
-        std::vector<int> solve_vertex_cover();
+        std::vector<int> cnf_sat_vc();
+        std::vector<int> cnf_3_sat_vc();
+        std::vector<int> approx_vc_1();
+        std::vector<int> approx_vc_2();
+        std::vector<int> refined_approx_vc_1();
+        std::vector<int> refined_approx_vc_2();
     public:
         Graph();
         void graph_initalize(int, std::vector<int>);

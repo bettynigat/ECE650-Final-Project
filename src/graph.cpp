@@ -298,7 +298,7 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles) {
     return satisfiable;
 }
 
-std::vector<int> Graph::solve_vertex_cover() {
+std::vector<int> Graph::cnf_sat_vc() {
     int min_k = 1;
     int max_k = graph.size();
     std::vector<int> verticles;
@@ -328,4 +328,24 @@ std::string Graph::print_vertex_cover() {
         result += std::to_string(verticles[i]) + " "; 
     }
     return result;
+}
+
+std::vector<int> cnf_3_sat_vc() {
+    return std::vector<int>();
+}
+
+std::vector<int> approx_vc_1() {
+    return std::vector<int>();
+}
+
+std::vector<int> approx_vc_2() {
+    return std::vector<int>();
+}
+        
+std::vector<int> refined_approx_vc_1() {
+    return std::vector<int>();
+}
+
+std::vector<int> refined_approx_vc_2() {
+    return std::vector<int>(); 
 }
