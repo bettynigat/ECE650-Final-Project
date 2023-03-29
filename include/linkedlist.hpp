@@ -15,6 +15,7 @@ class Node {
 class LinkedList {   
     public:
         Node *head;
+        int length;
         LinkedList();
         void add_node(int);
         bool delete_node(int);

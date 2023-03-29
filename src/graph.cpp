@@ -322,7 +322,7 @@ std::vector<int> Graph::cnf_sat_vc() {
 
 
 std::string Graph::print_vertex_cover() {
-    std::vector<int> verticles = solve_vertex_cover();
+    std::vector<int> verticles = cnf_sat_vc();
     std::string result;
     for (int i = 0;i<verticles.size();i++) {
         result += std::to_string(verticles[i]) + " "; 

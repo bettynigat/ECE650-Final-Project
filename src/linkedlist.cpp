@@ -13,12 +13,14 @@ Node::Node(int data) {
 
 LinkedList::LinkedList() {
     head = NULL;
+    length = 0;
 }
 
 void LinkedList::add_node(int val) {
     Node *n = new Node(val);
     if (head == NULL) {
         head = n;
+        length++;
         return;
     }
     if (head->val == val) {
@@ -38,6 +40,7 @@ void LinkedList::add_node(int val) {
     }
     // val not found, add a node at the end
     temp->next = n;
+    length++;
 }
 
 bool LinkedList::delete_node(int val) {
