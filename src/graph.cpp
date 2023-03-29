@@ -322,30 +322,62 @@ std::vector<int> Graph::cnf_sat_vc() {
 
 
 std::string Graph::print_vertex_cover() {
-    std::vector<int> verticles = cnf_sat_vc();
+    std::vector<int> cnf_verticles = cnf_sat_vc();
+    std::vector<int> cnf_3_verticles = cnf_3_sat_vc();
+    std::vector<int> approx_1_verticles = approx_vc_1();
+    std::vector<int> approx_2_verticles = approx_vc_2();
+    std::vector<int> refined_1_verticles = refined_approx_vc_1();
+    std::vector<int> refined_2_verticles = refined_approx_vc_2();
     std::string result;
-    for (int i = 0;i<verticles.size();i++) {
-        result += std::to_string(verticles[i]) + " "; 
+    result += "CNF-SAT-VC: ";
+    for (int i = 0;i<cnf_verticles.size();i++) {
+        result += std::to_string(cnf_verticles[i]) + " "; 
     }
+    result += "\n";
+    result += "CNF-3-SAT-VC: ";
+    for (int i = 0;i<cnf_3_verticles.size();i++) {
+        result += std::to_string(cnf_3_verticles[i]) + " "; 
+    }
+    result += "\n";
+    result += "APPROX-VC-1: ";
+    for (int i = 0;i<approx_1_verticles.size();i++) {
+        result += std::to_string(approx_1_verticles[i]) + " "; 
+    }
+    result += "\n";
+    result += "APPROX-VC-2: ";
+    for (int i = 0;i<approx_2_verticles.size();i++) {
+        result += std::to_string(approx_2_verticles[i]) + " "; 
+    }
+    result += "\n";
+    result += "REFINED-APPROX-VC-1: ";
+    for (int i = 0;i<refined_1_verticles.size();i++) {
+        result += std::to_string(refined_1_verticles[i]) + " "; 
+    }
+    result += "\n";
+    result += "REFINED-APPROX-VC-2: ";
+    for (int i = 0;i<refined_2_verticles.size();i++) {
+        result += std::to_string(refined_2_verticles[i]) + " "; 
+    }
+    result += "\n";
     return result;
 }
 
-std::vector<int> cnf_3_sat_vc() {
+std::vector<int> Graph::cnf_3_sat_vc() {
     return std::vector<int>();
 }
 
-std::vector<int> approx_vc_1() {
+std::vector<int> Graph::approx_vc_1() {
     return std::vector<int>();
 }
 
-std::vector<int> approx_vc_2() {
+std::vector<int> Graph::approx_vc_2() {
     return std::vector<int>();
 }
         
-std::vector<int> refined_approx_vc_1() {
+std::vector<int> Graph::refined_approx_vc_1() {
     return std::vector<int>();
 }
 
-std::vector<int> refined_approx_vc_2() {
+std::vector<int> Graph::refined_approx_vc_2() {
     return std::vector<int>(); 
 }
