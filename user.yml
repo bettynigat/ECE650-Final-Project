@@ -4,11 +4,11 @@
 # Leave the second entry as is if there is only one person
 # on your team
 -
-  first: FIRST_NAME1
-  last: LAST_NAME1
-  watiam: WATIAM_ID1
-  student: STUDENT_ID1
-  email: email1
+  first: Minh Quan 
+  last: Quach
+  watiam: qqmquach
+  student: 21050664
+  email: qqmquach@uwaterloo.ca
 -
   first: FIRST_NAME2
   last: LAST_NAME2
