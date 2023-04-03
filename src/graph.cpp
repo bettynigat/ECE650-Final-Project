@@ -436,7 +436,7 @@ std::vector<int> Graph::refined_approx_vc_1() {
     vertextCover.push_back(2);
     vertextCover.push_back(3);
     vertextCover.push_back(4);
-    std::vector<int> removedVerticels;
+    
     // int vertexSize = vertextCover.size(); 
 
     // int removed, currentVertex, neightbour; 
@@ -466,6 +466,12 @@ std::vector<int> Graph::refined_approx_vc_1() {
     //     }
     // }
 
+    
+    return refine_vertext_cover_set(vertextCover);
+}
+
+std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover) {
+    std::vector<int> removedVerticels;
     for (auto& vertex: vertextCover) { 
         bool is_vc = true;
         //loop each neighor of vertex
@@ -493,8 +499,10 @@ std::vector<int> Graph::refined_approx_vc_1() {
 }
 
 std::vector<int> Graph::refined_approx_vc_2() {
-    std::vector<int> vertextCover = approx_vc_2(); 
-    int vertexSize = vertextCover.size(); 
+    //from what i understand, refined_approx_vc_1 and refined_approx_vc_2 are the same, therefore we can reuse refined_approx_vc_1 here 
+    std::vector<int> vertextCover = approx_vc_2();
+     
+    /*int vertexSize = vertextCover.size(); 
     int removed, currentVertex, neightbour; 
 
     for (int i=0; i<vertexSize; i++){
@@ -521,9 +529,10 @@ std::vector<int> Graph::refined_approx_vc_2() {
             auto it = find(vertextCover.begin(), vertextCover.end(), currentVertex);
             vertextCover.erase(it);
         }
-    }
+    } */
     
-    return vertextCover;}
+    return refine_vertext_cover_set(vertextCover);
+}
 
 std::string Graph::print_vertex_cover() {
     std::vector<int> cnf_verticles = cnf_sat_vc();
