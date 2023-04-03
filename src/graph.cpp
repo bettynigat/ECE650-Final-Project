@@ -329,12 +329,6 @@ std::string Graph::print_cnf_sat() {
     }
     result += "\n";
     return result;
-    
-    
-    
-    
-    
-    return result;
 }
 
 std::string Graph::print_cnf_3_sat() {
