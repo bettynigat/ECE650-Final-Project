@@ -430,36 +430,64 @@ std::vector<int> Graph::approx_vc_2() {
         
 std::vector<int> Graph::refined_approx_vc_1() {
 
-    std::vector<int> vertextCover = approx_vc_1(); 
-    int vertexSize = vertextCover.size(); 
+    std::vector<int> vertextCover /*=  approx_vc_1()*/; 
+    vertextCover.push_back(0);
+    vertextCover.push_back(2);
+    vertextCover.push_back(3);
+    vertextCover.push_back(4);
+    std::vector<int> removedVerticels;
+    // int vertexSize = vertextCover.size(); 
 
-    int removed, currentVertex, neightbour; 
-    for (int i=0; i<vertexSize; i++){
-        removed = true;
-        currentVertex = vertextCover[i]; 
-        for (int i = 0;i<internal_edges.size();i=i+2) {
-            if ((internal_edges[i] == currentVertex ) || (internal_edges[i+1] == currentVertex )){
-                if (internal_edges[i] == currentVertex ){
-                    neightbour = internal_edges[i+1]; 
-                }
-                else if (internal_edges[i+1] == currentVertex ){
-                    neightbour = internal_edges[i]; 
-                }
+    // int removed, currentVertex, neightbour; 
+    // for (int i=0; i<vertexSize; i++){
+    //     removed = true;
+    //     currentVertex = vertextCover[i]; 
+    //     for (int i = 0;i<internal_edges.size();i=i+2) {
+    //         if ((internal_edges[i] == currentVertex ) || (internal_edges[i+1] == currentVertex )){
+    //             if (internal_edges[i] == currentVertex ){
+    //                 neightbour = internal_edges[i+1]; 
+    //             }
+    //             else if (internal_edges[i+1] == currentVertex ){
+    //                 neightbour = internal_edges[i]; 
+    //             }
 
-                auto it = find(vertextCover.begin(), vertextCover.end(), neightbour);
-                if (it == vertextCover.end()){ //element not found means we can't remove it from vertex cover
-                    removed = false; 
-                    break; 
-                }
+    //             auto it = find(vertextCover.begin(), vertextCover.end(), neightbour);
+    //             if (it == vertextCover.end()){ //element not found means we can't remove it from vertex cover
+    //                 removed = false; 
+    //                 break; 
+    //             }
+    //         }
+    //     }
+
+    //     if (removed){ //means it can be removed
+    //         auto it = find(vertextCover.begin(), vertextCover.end(), currentVertex);
+    //         vertextCover.erase(it);
+    //     }
+    // }
+
+    for (auto& vertex: vertextCover) { 
+        bool is_vc = true;
+        //loop each neighor of vertex
+        LinkedList *l = graph[vertex];
+        Node *n = l->head;
+        while (n != NULL) {
+            int val = n->val;
+            if (std::find(vertextCover.begin(), vertextCover.end(), val) == vertextCover.end()) { //not exist mean we can not remove it 
+                is_vc = false;
+                break;
             }
+            n = n->next;
         }
-
-        if (removed){ //means it can be removed
-            auto it = find(vertextCover.begin(), vertextCover.end(), currentVertex);
+        if (is_vc) {
+            removedVerticels.push_back(vertex);
+        }
+    }
+    for (auto& vertex: removedVerticels) {
+        auto it = std::find(vertextCover.begin(), vertextCover.end(), vertex);
+        if (it != vertextCover.end()) { //element exists, then remove it from vertextCover
             vertextCover.erase(it);
         }
     }
-
     return vertextCover;
 }
 
