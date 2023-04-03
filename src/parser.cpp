@@ -47,24 +47,7 @@ bool CommandHandler::parse_line(const std::string &line, char &cmd, std::vector<
         }
         return true;
     }
-    else if (c == 's') {
-        int num;
-        stream >> num;
-        if (stream.fail()) {
-            error = bad_input;
-            return false;
-        }
-        arg.push_back(num);
-        stream >> num;
-        if (stream.fail()) {
-            error = bad_input;
-            return false;
-        }
-        arg.push_back(num);
-        cmd = 's';
-
-        return true;
-    } else {
+     else {
         error = unknown_command;
         return false;
     }
@@ -72,6 +55,14 @@ bool CommandHandler::parse_line(const std::string &line, char &cmd, std::vector<
 
 CommandHandler::CommandHandler() {
     g = new Graph();
+    is_graph_initialized = false;
+    is_cnf_produced = true;
+    is_cnf_3_produced = true;
+    is_approx_1_produced = true;
+    is_approx_2_produced = true;
+    is_refined_1_produced = true;
+    is_refined_2_produced = true;
+    // is_cnf_produced = false;
 }
 
 bool CommandHandler::process_command(char c, std::vector<int> args, std::string &result) {
@@ -81,6 +72,7 @@ bool CommandHandler::process_command(char c, std::vector<int> args, std::string 
     case 'V':
         g->set_size(args[0]);
         is_entered_V_valid = true;
+        is_graph_initialized = false;
         break;
     case 'E':
         //if graph is already initialized, command E will be invalid 
@@ -106,32 +98,38 @@ bool CommandHandler::process_command(char c, std::vector<int> args, std::string 
         //if V and E are all valid, reset the previous data and re-initalize the new graph
         g->graph_initalize(g->get_size(), args);
         is_entered_V_valid = false;
-        result = g->print_vertex_cover();
+        is_graph_initialized = true;
+        // result = g->print_vertex_cover();
         return true;
         break;
-    case 's':
-         //validate vertices first before adding edges 
-         //reset V if E is not input or invalid E 
-         is_entered_V_valid = false;
-         g->set_size(g->get_graph().size());
-         if (args.size() != 2) {
-            result = invalid_input;
-            return false;
-         }
-         for (int i = 0; i<args.size(); i++) {
-            if (args[i] >= g->get_size() || args[i] < 0) { // vertex input >= number of V or negative number
-                result = out_of_range;
-                return false;
-            }
-        }
-        result = g->print_shortest_path(args[0],args[1]);
-        if (result == vertices_not_reach) {
-            return false;
-        }
-        return true;
+
     default:
         result = unknown_command;
         return false;
     }
     return true;
+}
+
+void CommandHandler::print_cnf_sat() {
+    std::cout << g->print_cnf_sat();
+}
+
+void CommandHandler::print_cnf_3_sat() {
+    std::cout << g->print_cnf_3_sat();
+}
+
+void CommandHandler::print_approx_1() {
+    std::cout << g->print_approx_1();
+}
+
+void CommandHandler::print_approx_2() {
+    std::cout << g->print_approx_2();
+} 
+
+void CommandHandler::print_refined_approx_1() {
+    std::cout << g->print_refined_approx_1();
+}
+
+void CommandHandler::print_refined_approx_2() {
+    std::cout << g->print_refined_approx_2();
 }

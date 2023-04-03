@@ -321,40 +321,65 @@ std::vector<int> Graph::cnf_sat_vc() {
 }
 
 
-std::string Graph::print_vertex_cover() {
+std::string Graph::print_cnf_sat() {
     std::vector<int> cnf_verticles = cnf_sat_vc();
-    std::vector<int> cnf_3_verticles = cnf_3_sat_vc();
-    std::vector<int> approx_1_verticles = approx_vc_1();
-    std::vector<int> approx_2_verticles = approx_vc_2();
-    std::vector<int> refined_1_verticles = refined_approx_vc_1();
-    std::vector<int> refined_2_verticles = refined_approx_vc_2();
-    std::string result;
-    result += "CNF-SAT-VC: ";
+    std::string result = "CNF-SAT-VC: ";
     for (int i = 0;i<cnf_verticles.size();i++) {
         result += std::to_string(cnf_verticles[i]) + " "; 
     }
     result += "\n";
-    result += "CNF-3-SAT-VC: ";
+    return result;
+    
+    
+    
+    
+    
+    return result;
+}
+
+std::string Graph::print_cnf_3_sat() {
+    std::vector<int> cnf_3_verticles = cnf_3_sat_vc();
+    std::string result = "CNF-3-SAT-VC: ";
     for (int i = 0;i<cnf_3_verticles.size();i++) {
         result += std::to_string(cnf_3_verticles[i]) + " "; 
     }
     result += "\n";
-    result += "APPROX-VC-1: ";
+    return result;
+}
+
+std::string Graph::print_approx_1() {
+    std::vector<int> approx_1_verticles = approx_vc_1();
+    std::string result = "APPROX-VC-1: ";
     for (int i = 0;i<approx_1_verticles.size();i++) {
         result += std::to_string(approx_1_verticles[i]) + " "; 
     }
     result += "\n";
-    result += "APPROX-VC-2: ";
+    return result;
+}
+
+std::string Graph::print_approx_2() {
+    std::vector<int> approx_2_verticles = approx_vc_2();
+    std::string result = "APPROX-VC-2: ";
     for (int i = 0;i<approx_2_verticles.size();i++) {
         result += std::to_string(approx_2_verticles[i]) + " "; 
     }
     result += "\n";
-    result += "REFINED-APPROX-VC-1: ";
+    return result;
+}
+
+std::string Graph::print_refined_approx_1() {
+    std::vector<int> refined_1_verticles = refined_approx_vc_1();
+    std::string result = "REFINED-APPROX-VC-1: ";
     for (int i = 0;i<refined_1_verticles.size();i++) {
         result += std::to_string(refined_1_verticles[i]) + " "; 
     }
     result += "\n";
-    result += "REFINED-APPROX-VC-2: ";
+    return result;
+}
+
+std::string Graph::print_refined_approx_2() {
+    std::vector<int> refined_2_verticles = refined_approx_vc_2();
+    std::string result = "REFINED-APPROX-VC-2: ";
     for (int i = 0;i<refined_2_verticles.size();i++) {
         result += std::to_string(refined_2_verticles[i]) + " "; 
     }
