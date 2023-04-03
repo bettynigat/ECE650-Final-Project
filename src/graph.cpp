@@ -431,6 +431,7 @@ std::vector<int> Graph::approx_vc_2() {
 std::vector<int> Graph::refined_approx_vc_1() {
 
     std::vector<int> vertextCover /*=  approx_vc_1()*/; 
+    //because your approx_vc_1 has not been correct yet, assume that it returns 0 2 3 4
     vertextCover.push_back(0);
     vertextCover.push_back(2);
     vertextCover.push_back(3);
