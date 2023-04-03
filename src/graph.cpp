@@ -324,57 +324,90 @@ std::vector<int> Graph::cnf_3_sat_vc() {
     return std::vector<int>();
 }
 
+std::vector<LinkedList *> Graph::copy() {
+    std::vector<LinkedList*> graph_copy;
+    for (int i=0;i<graph.size();i++) {
+        LinkedList* list_copy = graph[i]->copy();
+        graph_copy.push_back(list_copy);
+    }
+    return graph_copy;
+}
+
 std::vector<int> Graph::approx_vc_1() {
+    /*
+        1.get vertex with highest degree
+        2. add to vertex cover list
+        3. remove vertex from the graph 
+        4. repeat until no edge left (a.k.a all length = 0)
+    */
     
-    std::vector<int> degreeArray(size,0);
-    std::vector<int>vertexSet; 
     std::vector<int> vertextCover;
+    //step 0: extremely important: MUST work on the copied version of graph for multi-threading purpose
+    std::vector<LinkedList*> graph_copy = copy();
+    
+    while (!is_graph_empty(graph_copy)) {  //step 4
+        //step 1.
+        auto max = std::max_element(graph_copy.begin(), graph_copy.end(),
+            [](const LinkedList *a, const LinkedList *b) {
+                return a->length < b->length;
+        });
+        int max_index = std::distance(graph_copy.begin(), max);
 
-    //initalize => vertextSet = {0,1,2,...V-1}
-    for (int i=0; i<size; i++){
-        vertexSet.push_back(i); 
+        //step 2
+        vertextCover.push_back(max_index);
+        //step 3
+        remove_vertex(max_index, graph_copy);
     }
+    
 
-    //keep record of deleted edges that are incident on a v that is in vertext cover 
-    std::vector<bool> deletedEdges(internal_edges.size()/2 ,false); 
 
-    //determine degree of the corresponding v in vertextSet
-    for (int i = 0;i<internal_edges.size();i=i+2) {
-        degreeArray[internal_edges[i]]++;
-        degreeArray[internal_edges[i+1]]++; 
-    }
+    // std::vector<int> degreeArray(size,0);
+    // std::vector<int>vertexSet; 
+    // //initalize => vertextSet = {0,1,2,...V-1}
+    // for (int i=0; i<size; i++){
+    //     vertexSet.push_back(i); 
+    // }
 
-    //main algoirthm 
-    for (int i=0; i<size; i++){
-        int max = *std::max_element(degreeArray.begin(), degreeArray.end());
-        auto it_degreeArray = find(degreeArray.begin(), degreeArray.end(), max);
-        int index = it_degreeArray - degreeArray.begin();
+    // //keep record of deleted edges that are incident on a v that is in vertext cover 
+    // std::vector<bool> deletedEdges(internal_edges.size()/2 ,false); 
 
-        //for each loop choose the the vertext with the highest degree (maxVertext) and add to vertext cover
-        int maxVertex = vertexSet[index];
-        vertextCover.push_back(maxVertex);
+    // //determine degree of the corresponding v in vertextSet
+    // for (int i = 0;i<internal_edges.size();i=i+2) {
+    //     degreeArray[internal_edges[i]]++;
+    //     degreeArray[internal_edges[i+1]]++; 
+    // }
 
-        bool finish = true; 
+    // //main algoirthm 
+    // for (int i=0; i<size; i++){
+    //     int max = *std::max_element(degreeArray.begin(), degreeArray.end());
+    //     auto it_degreeArray = find(degreeArray.begin(), degreeArray.end(), max);
+    //     int index = it_degreeArray - degreeArray.begin();
 
-        for (int i = 0;i<internal_edges.size();i=i+2) {
-            if ((internal_edges[i]==maxVertex) || (internal_edges[i+1]==maxVertex)){
-                deletedEdges[i] = true; 
-            }
+    //     //for each loop choose the the vertext with the highest degree (maxVertext) and add to vertext cover
+    //     int maxVertex = vertexSet[index];
+    //     vertextCover.push_back(maxVertex);
 
-            if(deletedEdges[i] == false){//means still there are undeleted edges, so continue the loop
-                finish=false; 
-            }
-        }
+    //     bool finish = true; 
 
-        if (finish==true){
-            break; 
-        }
-        auto it_vertexSet = find(vertexSet.begin(), vertexSet.end(), vertexSet[index]);
+    //     for (int i = 0;i<internal_edges.size();i=i+2) {
+    //         if ((internal_edges[i]==maxVertex) || (internal_edges[i+1]==maxVertex)){
+    //             deletedEdges[i] = true; 
+    //         }
 
-        //delete the current vertex and continue to next-highest degree vertex
-        vertexSet.erase(it_vertexSet);
-        degreeArray.erase(it_degreeArray);
-    }
+    //         if(deletedEdges[i] == false){//means still there are undeleted edges, so continue the loop
+    //             finish=false; 
+    //         }
+    //     }
+
+    //     if (finish==true){
+    //         break; 
+    //     }
+    //     auto it_vertexSet = find(vertexSet.begin(), vertexSet.end(), vertexSet[index]);
+
+    //     //delete the current vertex and continue to next-highest degree vertex
+    //     vertexSet.erase(it_vertexSet);
+    //     degreeArray.erase(it_degreeArray);
+    // }
 
     return vertextCover;
 }
@@ -430,12 +463,8 @@ std::vector<int> Graph::approx_vc_2() {
         
 std::vector<int> Graph::refined_approx_vc_1() {
 
-    std::vector<int> vertextCover /*=  approx_vc_1()*/; 
-    //because your approx_vc_1 has not been correct yet, assume that it returns 0 2 3 4
-    vertextCover.push_back(0);
-    vertextCover.push_back(2);
-    vertextCover.push_back(3);
-    vertextCover.push_back(4);
+    std::vector<int> vertextCover =  approx_vc_1(); 
+    
     
     // int vertexSize = vertextCover.size(); 
 
@@ -573,4 +602,34 @@ std::string Graph::print_vertex_cover() {
     }
     result += "\n";
     return result;
+}
+
+void Graph::remove_vertex(int vertex, std::vector<LinkedList *> &graph_copy) {
+    if (vertex >= graph_copy.size()) {
+        return;
+    }
+
+    LinkedList *l = graph_copy[vertex];
+    Node *n = l->head;
+    //loop every neigbour of vertex
+    while (n != NULL) {
+        int val = n->val;
+        //for each neighbor, try to delete vertex
+        LinkedList *neighbor = graph_copy[val];
+        neighbor->delete_node(vertex);
+        n = n->next;
+    }
+
+    //finially delete the whole linkedlist at vertex index
+    l->set_empty();
+}
+
+bool Graph::is_graph_empty(std::vector<LinkedList *> graph) {
+    bool is_empty = true;
+    for (int i =0;i<graph.size();i++) {
+        if (graph[i]->head != NULL && graph[i]->length > 0) {
+            is_empty = false;
+        }
+    }
+    return is_empty;
 }

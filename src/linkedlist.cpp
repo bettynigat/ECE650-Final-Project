@@ -55,6 +55,7 @@ bool LinkedList::delete_node(int val) {
         else {
             head = head -> next;
         }
+        length--;
         return true;
     }
 
@@ -65,6 +66,7 @@ bool LinkedList::delete_node(int val) {
             prev->next = current->next;
             current->next = NULL;
             delete current;
+            length--;
             return true;
         }
         prev = current;
@@ -72,6 +74,11 @@ bool LinkedList::delete_node(int val) {
 
     }
     return false;
+}
+
+void LinkedList::set_empty() {
+    length = 0;
+    head = NULL;
 }
 
 std::string LinkedList::print_list() {
@@ -86,4 +93,25 @@ std::string LinkedList::print_list() {
         n = n->next;
     }
     return s;
+}
+
+LinkedList* LinkedList::copy() {
+    LinkedList* list_copy = new LinkedList();
+    list_copy->length = length;
+
+    Node *n = head;
+    Node *prev = NULL;
+    while (n != NULL) {
+        Node *node_copy = new Node();
+        node_copy->val = n->val;
+        node_copy->next = NULL;
+        if (prev == NULL) {
+            list_copy->head = node_copy;
+        } else {
+            prev->next = node_copy;
+        }
+        prev = node_copy;
+        n = n->next;
+    }
+    return list_copy;
 }

@@ -19,5 +19,7 @@ class LinkedList {
         LinkedList();
         void add_node(int);
         bool delete_node(int);
+        void set_empty();
         std::string print_list();
+        LinkedList * copy();
 };
