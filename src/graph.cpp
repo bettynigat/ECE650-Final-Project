@@ -338,7 +338,7 @@ std::vector<int> Graph::approx_vc_1() {
         1.get vertex with highest degree
         2. add to vertex cover list
         3. remove vertex from the graph 
-        4. repeat until no edge left (a.k.a all length = 0)
+        4. repeat until no edge left (a.k.a all lengths = 0)
     */
     
     std::vector<int> vertextCover;
