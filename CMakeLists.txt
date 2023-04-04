@@ -12,7 +12,8 @@ endif()
 ## Project specific configurations go here
 
 # enable c++11 support
-set (CMAKE_CXX_FLAGS "-std=c++11 -Wall ${CMAKE_CXX_FLAGS}")
+set (CMAKE_CXX_FLAGS "-std=c++11 -Wall -pthread ${CMAKE_CXX_FLAGS}")
+set (CMAKE_C_FLAGS -pthread)
 include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
 

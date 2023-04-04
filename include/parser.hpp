@@ -3,7 +3,7 @@
 #include "constants.hpp"
 #include "graph.hpp"
 #include <mutex>
-
+#include <condition_variable>
 class CommandHandler {
     protected:
         Graph *g;
