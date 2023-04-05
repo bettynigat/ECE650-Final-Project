@@ -358,57 +358,6 @@ std::vector<int> Graph::approx_vc_1() {
         //step 3
         remove_vertex(max_index, graph_copy);
     }
-    
-
-
-    // std::vector<int> degreeArray(size,0);
-    // std::vector<int>vertexSet; 
-    // //initalize => vertextSet = {0,1,2,...V-1}
-    // for (int i=0; i<size; i++){
-    //     vertexSet.push_back(i); 
-    // }
-
-    // //keep record of deleted edges that are incident on a v that is in vertext cover 
-    // std::vector<bool> deletedEdges(internal_edges.size()/2 ,false); 
-
-    // //determine degree of the corresponding v in vertextSet
-    // for (int i = 0;i<internal_edges.size();i=i+2) {
-    //     degreeArray[internal_edges[i]]++;
-    //     degreeArray[internal_edges[i+1]]++; 
-    // }
-
-    // //main algoirthm 
-    // for (int i=0; i<size; i++){
-    //     int max = *std::max_element(degreeArray.begin(), degreeArray.end());
-    //     auto it_degreeArray = find(degreeArray.begin(), degreeArray.end(), max);
-    //     int index = it_degreeArray - degreeArray.begin();
-
-    //     //for each loop choose the the vertext with the highest degree (maxVertext) and add to vertext cover
-    //     int maxVertex = vertexSet[index];
-    //     vertextCover.push_back(maxVertex);
-
-    //     bool finish = true; 
-
-    //     for (int i = 0;i<internal_edges.size();i=i+2) {
-    //         if ((internal_edges[i]==maxVertex) || (internal_edges[i+1]==maxVertex)){
-    //             deletedEdges[i] = true; 
-    //         }
-
-    //         if(deletedEdges[i] == false){//means still there are undeleted edges, so continue the loop
-    //             finish=false; 
-    //         }
-    //     }
-
-    //     if (finish==true){
-    //         break; 
-    //     }
-    //     auto it_vertexSet = find(vertexSet.begin(), vertexSet.end(), vertexSet[index]);
-
-    //     //delete the current vertex and continue to next-highest degree vertex
-    //     vertexSet.erase(it_vertexSet);
-    //     degreeArray.erase(it_degreeArray);
-    // }
-
     return vertextCover;
 }
 
@@ -463,39 +412,7 @@ std::vector<int> Graph::approx_vc_2() {
         
 std::vector<int> Graph::refined_approx_vc_1() {
 
-    std::vector<int> vertextCover =  approx_vc_1(); 
-    
-    
-    // int vertexSize = vertextCover.size(); 
-
-    // int removed, currentVertex, neightbour; 
-    // for (int i=0; i<vertexSize; i++){
-    //     removed = true;
-    //     currentVertex = vertextCover[i]; 
-    //     for (int i = 0;i<internal_edges.size();i=i+2) {
-    //         if ((internal_edges[i] == currentVertex ) || (internal_edges[i+1] == currentVertex )){
-    //             if (internal_edges[i] == currentVertex ){
-    //                 neightbour = internal_edges[i+1]; 
-    //             }
-    //             else if (internal_edges[i+1] == currentVertex ){
-    //                 neightbour = internal_edges[i]; 
-    //             }
-
-    //             auto it = find(vertextCover.begin(), vertextCover.end(), neightbour);
-    //             if (it == vertextCover.end()){ //element not found means we can't remove it from vertex cover
-    //                 removed = false; 
-    //                 break; 
-    //             }
-    //         }
-    //     }
-
-    //     if (removed){ //means it can be removed
-    //         auto it = find(vertextCover.begin(), vertextCover.end(), currentVertex);
-    //         vertextCover.erase(it);
-    //     }
-    // }
-
-    
+    std::vector<int> vertextCover =  approx_vc_1();     
     return refine_vertext_cover_set(vertextCover);
 }
 
@@ -527,39 +444,8 @@ std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover) 
     return vertextCover;
 }
 
-std::vector<int> Graph::refined_approx_vc_2() {
-    //from what i understand, refined_approx_vc_1 and refined_approx_vc_2 are the same, therefore we can reuse refined_approx_vc_1 here 
-    std::vector<int> vertextCover = approx_vc_2();
-     
-    /*int vertexSize = vertextCover.size(); 
-    int removed, currentVertex, neightbour; 
-
-    for (int i=0; i<vertexSize; i++){
-        removed = true;
-        currentVertex = vertextCover[i]; 
-        for (int i = 0;i<internal_edges.size();i=i+2) {
-            if ((internal_edges[i] == currentVertex ) || (internal_edges[i+1] == currentVertex )){
-                if (internal_edges[i] == currentVertex ){
-                    neightbour = internal_edges[i+1]; 
-                }
-                else if (internal_edges[i+1] == currentVertex ){
-                    neightbour = internal_edges[i]; 
-                }
-
-                auto it = find(vertextCover.begin(), vertextCover.end(), neightbour);
-                if (it == vertextCover.end()){
-                    removed = false; 
-                    break; 
-                }
-            }
-        }
-        
-        if (removed){
-            auto it = find(vertextCover.begin(), vertextCover.end(), currentVertex);
-            vertextCover.erase(it);
-        }
-    } */
-    
+std::vector<int> Graph::refined_approx_vc_2() { 
+    std::vector<int> vertextCover = approx_vc_2();    
     return refine_vertext_cover_set(vertextCover);
 }
 
