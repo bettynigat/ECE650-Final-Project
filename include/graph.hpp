@@ -38,5 +38,12 @@ class Graph {
         std::vector<LinkedList *> get_graph();
         std::string print_shortest_path(int,int);
         
-        std::string print_vertex_cover();
+        std::string print_cnf_sat();
+        std::string print_cnf_3_sat();
+        std::string print_approx_1();
+        std::string print_approx_2();
+        std::string print_refined_approx_1();
+        std::string print_refined_approx_2();
+
+
 };
