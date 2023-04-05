@@ -237,12 +237,12 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
             solver->addClause(cl); 
         }
 
-        else{
+        else if (3CNF){
             if (cl.size() <=3){
                 solver->addClause(cl);
             }
 
-            else{
+            else {
                 Minisat::Lit B[cl.size()]; //bo, b1, .... bn
                 for (int l=0; l<cl.size(); l++){ // initialize the variables
                     B[l] = Minisat::mkLit(solver->newVar()); 
@@ -321,7 +321,7 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
         }
 
         if(!is3CNF){
-            solver->addClause(cl); 
+            solver->addClause(clause1); 
         }
 
         else{
