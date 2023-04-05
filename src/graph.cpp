@@ -257,7 +257,7 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
                         solver->addClause(tempClause);
                     }
                     else if (l==cl.size()-1){
-                        tempClause.push(~B[l]);
+                        tempClause.push(~B[l-1]);
                         tempClause.push(cl[l]);
                         //~b(n-1) v L(n)
                         solver->addClause(tempClause);
@@ -344,7 +344,7 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
                         solver->addClause(tempClause);
                     }
                     else if (l==cl.size()-1){
-                        tempClause.push(~B[l]);
+                        tempClause.push(~B[l-1]);
                         tempClause.push(clause1[l]);
                         //~b(n-1) v L(n)
                         solver->addClause(tempClause);
