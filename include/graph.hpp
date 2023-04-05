@@ -16,7 +16,7 @@ class Graph {
         void remove_vertex(int , std::vector<LinkedList *> &);
         std::vector<int> shortest_uncycle_path(int,int, std::string &);
         std::vector<int> shortest_cycle_path(int, std::string &);
-        bool is_vertex_cover(int, std::vector<int> &);
+        bool is_vertex_cover(int, std::vector<int> &, bool);
         std::vector<int> cnf_sat_vc();
         std::vector<int> cnf_3_sat_vc();
         std::vector<int> approx_vc_1();
