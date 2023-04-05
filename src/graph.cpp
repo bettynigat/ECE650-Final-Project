@@ -237,7 +237,7 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
             solver->addClause(cl); 
         }
 
-        else if (3CNF){
+        else{
             if (cl.size() <=3){
                 solver->addClause(cl);
             }
