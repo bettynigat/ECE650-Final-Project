@@ -320,6 +320,134 @@ std::vector<int> Graph::cnf_sat_vc() {
     return result;
 }
 
+std::vector<int> Graph::cnf_3_sat_vc() {
+    return std::vector<int>();
+}
+
+std::vector<LinkedList *> Graph::copy() {
+    std::vector<LinkedList*> graph_copy;
+    for (int i=0;i<graph.size();i++) {
+        LinkedList* list_copy = graph[i]->copy();
+        graph_copy.push_back(list_copy);
+    }
+    return graph_copy;
+}
+
+std::vector<int> Graph::approx_vc_1() {
+    /*
+        1.get vertex with highest degree
+        2. add to vertex cover list
+        3. remove vertex from the graph 
+        4. repeat until no edge left (a.k.a all lengths = 0)
+    */
+    
+    std::vector<int> vertextCover;
+    //step 0: extremely important: MUST work on the copied version of graph for multi-threading purpose
+    std::vector<LinkedList*> graph_copy = copy();
+    
+    while (!is_graph_empty(graph_copy)) {  //step 4
+        //step 1.
+        auto max = std::max_element(graph_copy.begin(), graph_copy.end(),
+            [](const LinkedList *a, const LinkedList *b) {
+                return a->length < b->length;
+        });
+        int max_index = std::distance(graph_copy.begin(), max);
+
+        //step 2
+        vertextCover.push_back(max_index);
+        //step 3
+        remove_vertex(max_index, graph_copy);
+    }
+    return vertextCover;
+}
+
+std::vector<int> Graph::approx_vc_2() {
+    
+    std::vector<int> vertextCover;
+    int num_edges = internal_edges.size()/2; 
+
+    //keep record of deleted edges that are incident on a v in vertext cover 
+    std::vector<bool> deletedEdges(num_edges ,false); 
+
+    bool finish; 
+    for (int i = 0;i<internal_edges.size();i=i+2) {
+        finish = true; 
+        int u = internal_edges[i];
+        int v = internal_edges[i+1]; 
+
+        //only u and v to vertextCover only if they are not already there
+        auto it_u = find(vertextCover.begin(), vertextCover.end(), u);
+        if (it_u == vertextCover.end()){
+            vertextCover.push_back(u);
+        }
+
+        auto it_v = find(vertextCover.begin(), vertextCover.end(), v );
+        if (it_v == vertextCover.end()){//element not found means we can't remove it from vertex cover
+            vertextCover.push_back(v);
+        }
+
+        //delete all edges adjecent to u or v
+        for (int i = 0;i<internal_edges.size();i=i+2){
+            if (deletedEdges[i/2]==false){ //edge not deleted yet
+                if ((internal_edges[i]==u) || (internal_edges[i]==v) ||(internal_edges[i+1]==u) || (internal_edges[i+1]==v)){
+                        deletedEdges[i/2] = true; 
+                    }
+            }
+        }
+
+        //break loop when all edges have been deleted 
+         for (int i = 0; i<num_edges; i++){
+            if(deletedEdges[i]==false){
+               finish = false; 
+               break;  
+            }
+        }
+        if (finish==true){
+            break; 
+        }
+    }
+    
+    return vertextCover;
+}
+        
+std::vector<int> Graph::refined_approx_vc_1() {
+
+    std::vector<int> vertextCover =  approx_vc_1();     
+    return refine_vertext_cover_set(vertextCover);
+}
+
+std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover) {
+    std::vector<int> removedVerticels;
+    for (auto& vertex: vertextCover) { 
+        bool is_vc = true;
+        //loop each neighor of vertex
+        LinkedList *l = graph[vertex];
+        Node *n = l->head;
+        while (n != NULL) {
+            int val = n->val;
+            if (std::find(vertextCover.begin(), vertextCover.end(), val) == vertextCover.end()) { //not exist mean we can not remove it 
+                is_vc = false;
+                break;
+            }
+            n = n->next;
+        }
+        if (is_vc) {
+            removedVerticels.push_back(vertex);
+        }
+    }
+    for (auto& vertex: removedVerticels) {
+        auto it = std::find(vertextCover.begin(), vertextCover.end(), vertex);
+        if (it != vertextCover.end()) { //element exists, then remove it from vertextCover
+            vertextCover.erase(it);
+        }
+    }
+    return vertextCover;
+}
+
+std::vector<int> Graph::refined_approx_vc_2() { 
+    std::vector<int> vertextCover = approx_vc_2();    
+    return refine_vertext_cover_set(vertextCover);
+}
 
 std::string Graph::print_vertex_cover() {
     std::vector<int> cnf_verticles = cnf_sat_vc();
@@ -362,22 +490,32 @@ std::string Graph::print_vertex_cover() {
     return result;
 }
 
-std::vector<int> Graph::cnf_3_sat_vc() {
-    return std::vector<int>();
+void Graph::remove_vertex(int vertex, std::vector<LinkedList *> &graph_copy) {
+    if (vertex >= graph_copy.size()) {
+        return;
+    }
+
+    LinkedList *l = graph_copy[vertex];
+    Node *n = l->head;
+    //loop every neigbour of vertex
+    while (n != NULL) {
+        int val = n->val;
+        //for each neighbor, try to delete vertex
+        LinkedList *neighbor = graph_copy[val];
+        neighbor->delete_node(vertex);
+        n = n->next;
+    }
+
+    //finially delete the whole linkedlist at vertex index
+    l->set_empty();
 }
 
-std::vector<int> Graph::approx_vc_1() {
-    return std::vector<int>();
-}
-
-std::vector<int> Graph::approx_vc_2() {
-    return std::vector<int>();
-}
-        
-std::vector<int> Graph::refined_approx_vc_1() {
-    return std::vector<int>();
-}
-
-std::vector<int> Graph::refined_approx_vc_2() {
-    return std::vector<int>(); 
+bool Graph::is_graph_empty(std::vector<LinkedList *> graph) {
+    bool is_empty = true;
+    for (int i =0;i<graph.size();i++) {
+        if (graph[i]->head != NULL && graph[i]->length > 0) {
+            is_empty = false;
+        }
+    }
+    return is_empty;
 }

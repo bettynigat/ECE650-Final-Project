@@ -12,6 +12,8 @@ class Graph {
         int size;
         std::vector<int> internal_edges;
         std::vector<LinkedList *> graph;
+        std::vector<LinkedList *> copy();
+        void remove_vertex(int , std::vector<LinkedList *> &);
         std::vector<int> shortest_uncycle_path(int,int, std::string &);
         std::vector<int> shortest_cycle_path(int, std::string &);
         bool is_vertex_cover(int, std::vector<int> &);
@@ -21,6 +23,9 @@ class Graph {
         std::vector<int> approx_vc_2();
         std::vector<int> refined_approx_vc_1();
         std::vector<int> refined_approx_vc_2();
+        std::vector<int> refine_vertext_cover_set(std::vector<int>);
+        bool is_graph_empty(std::vector<LinkedList *>);
+
     public:
         Graph();
         void graph_initalize(int, std::vector<int>);
