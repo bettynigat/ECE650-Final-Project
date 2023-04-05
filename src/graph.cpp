@@ -207,7 +207,7 @@ std::string Graph::print_shortest_path(int src, int des) {
     
 }
 /*Reference here: https://git.uwaterloo.ca/ece650-1231/minisat-demo/-/blob/master/ece650-minisat.cpp */
-bool Graph::is_vertex_cover(int k, std::vector<int> &verticles) {
+bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
     //n × k atomic propositions
     Minisat::Var atomic_pro[size][k];
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
@@ -233,45 +233,46 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles) {
             cl.push(l);
         }
 
-        if (cl.size() <=3){
-            solver->addClause(cl);
+        if(!is3CNF){
+            solver->addClause(cl); 
         }
 
         else{
-            Minisat::Lit B[cl.size()]; //bo, b1, .... bn
-            for (int l=0; l<cl.size(); l++){ // initialize the variables
-                B[l] = Minisat::mkLit(solver->newVar()); 
+            if (cl.size() <=3){
+                solver->addClause(cl);
             }
 
-            for (int l=0; l<cl.size(); l++){ // initialize the variables
-                Minisat::vec<Minisat::Lit> tempClause;
-                if (l==0){
-                    tempClause.push(cl[0]); 
-                    tempClause.push(B[0]); 
-                    //L(0) v b(0)
-                    solver->addClause(tempClause);
+            else{
+                Minisat::Lit B[cl.size()]; //bo, b1, .... bn
+                for (int l=0; l<cl.size(); l++){ // initialize the variables
+                    B[l] = Minisat::mkLit(solver->newVar()); 
                 }
-                else if (l==cl.size()-1){
-                    tempClause.push(~B[l]);
-                    tempClause.push(cl[l]);
-                    //~b(n-1) v L(n)
-                    solver->addClause(tempClause);
-                }
-                else { //in the middle 
-                    tempClause.push(~B[l-1]);
-                    tempClause.push(cl[l]);
-                    tempClause.push(B[l]);
-                    //~b(n-1) v L(n) v b[n]
-                    solver->addClause(tempClause);
+
+                for (int l=0; l<cl.size(); l++){ // initialize the variables
+                    Minisat::vec<Minisat::Lit> tempClause;
+                    if (l==0){
+                        tempClause.push(cl[0]); 
+                        tempClause.push(B[0]); 
+                        //L(0) v b(0)
+                        solver->addClause(tempClause);
+                    }
+                    else if (l==cl.size()-1){
+                        tempClause.push(~B[l]);
+                        tempClause.push(cl[l]);
+                        //~b(n-1) v L(n)
+                        solver->addClause(tempClause);
+                    }
+                    else { //in the middle 
+                        tempClause.push(~B[l-1]);
+                        tempClause.push(cl[l]);
+                        tempClause.push(B[l]);
+                        //~b(n-1) v L(n) v b[n]
+                        solver->addClause(tempClause);
+                    }
                 }
             } 
         }
     }
-
-
-
-
-
 
      /*clause 2:
      ∀m ∈ [0, n), ∀p, q ∈ [0, k) with p < q (aka p = q + 1, p∈[0,k-1),q ∈[p+1,k)), a clause (¬xm,p ∨ ¬xm,q)
@@ -319,38 +320,44 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles) {
             clause1.push(l2);
         }
 
-        if (clause1.size() <=3){
-            solver->addClause(clause1);
+        if(!is3CNF){
+            solver->addClause(cl); 
         }
 
         else{
-            Minisat::Lit B[clause1.size()]; //bo, b1, .... bn
-            for (int l=0; l<clause1.size(); l++){ // initialize the variables
-                B[l] = Minisat::mkLit(solver->newVar()); 
+            if (clause1.size() <=3){
+                solver->addClause(clause1);
             }
 
-            for (int l=0; l<clause1.size(); l++){ // initialize the variables
-                Minisat::vec<Minisat::Lit> tempClause;
-                if (l==0){
-                    tempClause.push(clause1[0]); 
-                    tempClause.push(B[0]); 
-                    //L(0) v b(0)
-                    solver->addClause(tempClause);
+            else{
+                Minisat::Lit B[clause1.size()]; //bo, b1, .... bn
+                for (int l=0; l<clause1.size(); l++){ // initialize the variables
+                    B[l] = Minisat::mkLit(solver->newVar()); 
                 }
-                else if (l==cl.size()-1){
-                    tempClause.push(~B[l]);
-                    tempClause.push(clause1[l]);
-                    //~b(n-1) v L(n)
-                    solver->addClause(tempClause);
-                }
-                else { //in the middle 
-                    tempClause.push(~B[l-1]);
-                    tempClause.push(clause1[l]);
-                    tempClause.push(B[l]);
-                    //~b(n-1) v L(n) v b[n]
-                    solver->addClause(tempClause);
-                }
-            } 
+
+                for (int l=0; l<clause1.size(); l++){ // initialize the variables
+                    Minisat::vec<Minisat::Lit> tempClause;
+                    if (l==0){
+                        tempClause.push(clause1[0]); 
+                        tempClause.push(B[0]); 
+                        //L(0) v b(0)
+                        solver->addClause(tempClause);
+                    }
+                    else if (l==cl.size()-1){
+                        tempClause.push(~B[l]);
+                        tempClause.push(clause1[l]);
+                        //~b(n-1) v L(n)
+                        solver->addClause(tempClause);
+                    }
+                    else { //in the middle 
+                        tempClause.push(~B[l-1]);
+                        tempClause.push(clause1[l]);
+                        tempClause.push(B[l]);
+                        //~b(n-1) v L(n) v b[n]
+                        solver->addClause(tempClause);
+                    }
+                } 
+            }
         }
     }
     
@@ -377,7 +384,7 @@ std::vector<int> Graph::cnf_sat_vc() {
     //determine the minimum size by binary search
     while (min_k <= max_k) {
         int mid_k = (min_k + max_k) / 2;
-        bool satisfiable = is_vertex_cover(mid_k,verticles);
+        bool satisfiable = is_vertex_cover(mid_k,verticles,false);
         if (satisfiable) {
             max_k = mid_k - 1;
             result = verticles; //keep the latest satisfiable list
@@ -392,7 +399,25 @@ std::vector<int> Graph::cnf_sat_vc() {
 }
 
 std::vector<int> Graph::cnf_3_sat_vc() {
-    return std::vector<int>();
+    int min_k = 1;
+    int max_k = graph.size();
+    std::vector<int> verticles;
+    std::vector<int> result;
+    //determine the minimum size by binary search
+    while (min_k <= max_k) {
+        int mid_k = (min_k + max_k) / 2;
+        bool satisfiable = is_vertex_cover(mid_k,verticles,true);
+        if (satisfiable) {
+            max_k = mid_k - 1;
+            result = verticles; //keep the latest satisfiable list
+            verticles.clear();
+        } else {
+            min_k = mid_k + 1;
+        }
+    }
+    //sort vertex cover vector
+    std::sort(result.begin(), result.end());
+    return result;
 }
 
 std::vector<LinkedList *> Graph::copy() {
