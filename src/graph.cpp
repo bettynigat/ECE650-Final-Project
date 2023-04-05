@@ -232,8 +232,46 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles) {
             Minisat::Lit l = Minisat::mkLit(atomic_pro[j][i]);
             cl.push(l);
         }
-        solver->addClause(cl);
+
+        if (cl.size() <=3){
+            solver->addClause(cl);
+        }
+
+        else{
+            Minisat::Lit B[cl.size()]; //bo, b1, .... bn
+            for (int l=0; l<cl.size(); l++){ // initialize the variables
+                B[l] = Minisat::mkLit(solver->newVar()); 
+            }
+
+            for (int l=0; l<cl.size(); l++){ // initialize the variables
+                Minisat::vec<Minisat::Lit> tempClause;
+                if (l==0){
+                    tempClause.push(cl[0]); 
+                    tempClause.push(B[0]); 
+                    //L(0) v b(0)
+                    solver->addClause(tempClause);
+                }
+                else if (l==cl.size()-1){
+                    tempClause.push(~B[l]);
+                    tempClause.push(cl[l]);
+                    //~b(n-1) v L(n)
+                    solver->addClause(tempClause);
+                }
+                else { //in the middle 
+                    tempClause.push(~B[l-1]);
+                    tempClause.push(cl[l]);
+                    tempClause.push(B[l]);
+                    //~b(n-1) v L(n) v b[n]
+                    solver->addClause(tempClause);
+                }
+            } 
+        }
     }
+
+
+
+
+
 
      /*clause 2:
      ∀m ∈ [0, n), ∀p, q ∈ [0, k) with p < q (aka p = q + 1, p∈[0,k-1),q ∈[p+1,k)), a clause (¬xm,p ∨ ¬xm,q)
@@ -280,7 +318,40 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles) {
             clause1.push(l1);
             clause1.push(l2);
         }
-        solver->addClause(clause1);
+
+        if (clause1.size() <=3){
+            solver->addClause(clause1);
+        }
+
+        else{
+            Minisat::Lit B[clause1.size()]; //bo, b1, .... bn
+            for (int l=0; l<clause1.size(); l++){ // initialize the variables
+                B[l] = Minisat::mkLit(solver->newVar()); 
+            }
+
+            for (int l=0; l<clause1.size(); l++){ // initialize the variables
+                Minisat::vec<Minisat::Lit> tempClause;
+                if (l==0){
+                    tempClause.push(clause1[0]); 
+                    tempClause.push(B[0]); 
+                    //L(0) v b(0)
+                    solver->addClause(tempClause);
+                }
+                else if (l==cl.size()-1){
+                    tempClause.push(~B[l]);
+                    tempClause.push(clause1[l]);
+                    //~b(n-1) v L(n)
+                    solver->addClause(tempClause);
+                }
+                else { //in the middle 
+                    tempClause.push(~B[l-1]);
+                    tempClause.push(clause1[l]);
+                    tempClause.push(B[l]);
+                    //~b(n-1) v L(n) v b[n]
+                    solver->addClause(tempClause);
+                }
+            } 
+        }
     }
     
     bool satisfiable = solver->solve();
