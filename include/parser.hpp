@@ -11,19 +11,6 @@ class CommandHandler {
         bool is_entered_V_valid;
     public: 
         CommandHandler();
-        pthread_mutex_t input_mutex;
-        pthread_mutex_t cnf_mutex;
-        pthread_mutex_t cnf_3_mutex;
-        pthread_mutex_t approx_1_mutex;
-        pthread_mutex_t approx_2_mutex;
-        pthread_mutex_t refined_1_mutex;
-        pthread_mutex_t refined_2_mutex;
-        pthread_cond_t cnf_cond;
-        pthread_cond_t cnf_3_cond;
-        pthread_cond_t approx_1_cond;
-        pthread_cond_t approx_2_cond;
-        pthread_cond_t refined_1_cond;
-        pthread_cond_t refined_2_cond;
         bool is_graph_initialized;
         bool is_cnf_produced;
         bool is_cnf_3_produced;

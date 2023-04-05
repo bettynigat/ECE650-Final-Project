@@ -62,7 +62,7 @@ CommandHandler::CommandHandler() {
     is_approx_2_produced = true;
     is_refined_1_produced = true;
     is_refined_2_produced = true;
-    // is_cnf_produced = false;
+    is_input_finished = false;
 }
 
 bool CommandHandler::process_command(char c, std::vector<int> args, std::string &result) {
