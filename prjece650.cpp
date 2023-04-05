@@ -8,10 +8,10 @@
 #include <mutex>
 #include <thread>
 
-void input(CommandHandler &handler) {
-    
+void *input(void *arg) {
+    CommandHandler &handler = *(CommandHandler *)arg;
     while (!std::cin.eof()) {
-        std::unique_lock<std::mutex> locker(handler.input_mutex);
+        pthread_mutex_lock(&handler.input_mutex);
         std::string line;
         std::getline(std::cin, line);
         if (line.size() == 0) {
@@ -25,22 +25,17 @@ void input(CommandHandler &handler) {
             if (handler.parse_line(line, cmd, arg, error_msg)) {
                 bool isValid = handler.process_command(cmd,arg,error_msg);
                 if (handler.is_graph_initialized) {
-                    locker.unlock();
+                    pthread_mutex_unlock(&handler.input_mutex);
                     handler.is_cnf_produced = false;
                     handler.is_cnf_3_produced = false;
                     handler.is_approx_1_produced = false;
                     handler.is_approx_2_produced = false;
-                    handler.is_refined_1_produced = false;
-                    handler.is_refined_2_produced = false;
-                    handler.cnf_cond.notify_all();
-                    handler.cnf_3_cond.notify_all();
-                    handler.approx_1_cond.notify_all();
-                    handler.approx_2_cond.notify_all();
-                    handler.refined_1_cond.notify_all();
-                    handler.refined_2_cond.notify_all();
+                    
+                    pthread_cond_broadcast(&handler.cnf_cond);
+                    pthread_cond_broadcast(&handler.cnf_3_cond);
+                    pthread_cond_broadcast(&handler.approx_1_cond);
+                    pthread_cond_broadcast(&handler.approx_2_cond);
                 }
-                
-                // std::cout << "Call here" << std::endl;
             }
             else {
                 std::cerr << error_msg << std::endl;
@@ -49,110 +44,169 @@ void input(CommandHandler &handler) {
         catch (...) {
             std::cerr << bad_input << std::endl;
         }
-        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     handler.is_input_finished = true;
-    handler.cnf_cond.notify_all();
-    handler.cnf_3_cond.notify_all();
-    handler.approx_1_cond.notify_all();
-    handler.approx_2_cond.notify_all();
-    handler.refined_1_cond.notify_all();
-    handler.refined_2_cond.notify_all();
+    pthread_cond_broadcast(&handler.cnf_cond);
+    pthread_cond_broadcast(&handler.cnf_3_cond);
+    pthread_cond_broadcast(&handler.approx_1_cond);
+    pthread_cond_broadcast(&handler.approx_2_cond);
+    pthread_cond_broadcast(&handler.refined_1_cond);
+    pthread_cond_broadcast(&handler.refined_2_cond);
+    return NULL;
 };
 
-void cnf_sat(CommandHandler &handler) {
+void *cnf_sat(void *arg) {
+    CommandHandler &handler = *(CommandHandler *)arg;
     while (true) {
-        std::unique_lock<std::mutex> locker(handler.cnf_mutex);
-        handler.cnf_cond.wait(locker, [&handler]{return !handler.is_cnf_produced || handler.is_input_finished; });
+        pthread_mutex_lock(&handler.cnf_mutex);
+        while(handler.is_cnf_produced && !handler.is_input_finished) {
+            pthread_cond_wait(&handler.cnf_cond, &handler.cnf_mutex);
+        }
         if (handler.is_input_finished) {
-            return;
+            return NULL;
         }
         handler.print_cnf_sat();
         handler.is_cnf_produced = true;
-        locker.unlock();
+        pthread_cond_signal(&handler.cnf_cond);
+        pthread_mutex_unlock(&handler.cnf_mutex);
     }
+    return NULL;
 };
 
-void cnf_3_sat(CommandHandler &handler) {
+void *cnf_3_sat(void *arg) {
+    CommandHandler &handler = *(CommandHandler *)arg;
     while (true) {
-        std::unique_lock<std::mutex> locker(handler.cnf_3_mutex);
-        handler.cnf_3_cond.wait(locker, [&handler]{return !handler.is_cnf_3_produced || handler.is_input_finished; });
+        pthread_mutex_lock(&handler.cnf_3_mutex);
+        while(handler.is_cnf_3_produced && !handler.is_input_finished) {
+            pthread_cond_wait(&handler.cnf_3_cond, &handler.cnf_3_mutex);
+        }
         if (handler.is_input_finished) {
-            return;
+            return NULL;
         }
         handler.print_cnf_3_sat();
         handler.is_cnf_3_produced = true;
-        locker.unlock();
+        pthread_cond_signal(&handler.cnf_3_cond);
+        pthread_mutex_unlock(&handler.cnf_3_mutex);
     }
+    return NULL;
 }
 
-void approx_1(CommandHandler &handler) {
+void *approx_1(void *arg) {
+    CommandHandler &handler = *(CommandHandler *)arg;
     while (true) {
-            std::unique_lock<std::mutex> locker(handler.approx_1_mutex);
-            handler.approx_1_cond.wait(locker, [&handler]{return !handler.is_approx_1_produced || handler.is_input_finished; });
-            if (handler.is_input_finished) {
-                return;
-            }
-            handler.print_approx_1();
-            handler.is_approx_1_produced = true;
-            locker.unlock();
+        pthread_mutex_lock(&handler.approx_1_mutex);
+        while(handler.is_approx_1_produced && !handler.is_input_finished) {
+            pthread_cond_wait(&handler.approx_1_cond, &handler.approx_1_mutex);
         }
-}
-void approx_2(CommandHandler &handler) {
-    while (true) {
-        std::unique_lock<std::mutex> locker(handler.approx_2_mutex);
-        handler.approx_2_cond.wait(locker, [&handler]{return !handler.is_approx_2_produced || handler.is_input_finished; });
         if (handler.is_input_finished) {
-            return;
+            return NULL;
+        }
+        handler.print_approx_1();
+        
+        handler.is_approx_1_produced = true;
+        //broadcast to refined_approx_1 to feed it with the data
+        std::cout << "I'm finish VC_1. Now i'm feeding refined_vc_1" << std::endl;
+        
+        pthread_cond_signal(&handler.approx_1_cond);
+        pthread_mutex_unlock(&handler.approx_1_mutex);
+        handler.is_refined_1_produced = false;
+        pthread_cond_broadcast(&handler.refined_1_cond);
+    }
+    return NULL;
+}
+void *approx_2(void *arg) {
+    CommandHandler &handler = *(CommandHandler *)arg;
+    while (true) {
+        pthread_mutex_lock(&handler.approx_2_mutex);
+        while(handler.is_approx_2_produced && !handler.is_input_finished) {
+            pthread_cond_wait(&handler.approx_2_cond, &handler.approx_2_mutex);
+        }
+        if (handler.is_input_finished) {
+            return NULL;
         }
         handler.print_approx_2();
         handler.is_approx_2_produced = true;
-        locker.unlock();
+        //broadcast to refined_approx_2 to feed it with the data
+        std::cout << "I'm finish VC_2. Now i'm feeding refined_vc_2" << std::endl;
+        
+        pthread_cond_signal(&handler.approx_2_cond);
+        pthread_mutex_unlock(&handler.approx_2_mutex);
+        handler.is_refined_2_produced = false;
+        pthread_cond_broadcast(&handler.refined_2_cond);
     }
-}
-void refined_approx_1(CommandHandler &handler) {
-    while (true) {
-            std::unique_lock<std::mutex> locker(handler.refined_1_mutex);
-            handler.refined_1_cond.wait(locker, [&handler]{return !handler.is_refined_1_produced || handler.is_input_finished; });
-            if (handler.is_input_finished) {
-                return;
-            }
-            handler.print_refined_approx_1();
-            handler.is_refined_1_produced = true;
-            locker.unlock();
-        }
+    return NULL;
 }
 
-void refined_approx_2(CommandHandler &handler) {
+void *refined_approx_1(void *arg) {
+    CommandHandler &handler = *(CommandHandler *)arg;
     while (true) {
-            std::unique_lock<std::mutex> locker(handler.refined_2_mutex);
-            handler.refined_2_cond.wait(locker, [&handler]{return !handler.is_refined_2_produced || handler.is_input_finished; });
-            if (handler.is_input_finished) {
-                return;
-            }
-            handler.print_refined_approx_2();
-            handler.is_refined_2_produced = true;
-            locker.unlock();
+        pthread_mutex_lock(&handler.refined_1_mutex);
+        while(handler.is_refined_1_produced && !handler.is_input_finished) {
+            pthread_cond_wait(&handler.refined_1_cond, &handler.refined_1_mutex);
         }
+        if (handler.is_input_finished) {
+            return NULL;
+        }
+        handler.print_refined_approx_1();
+        handler.is_refined_1_produced = true;
+        pthread_cond_signal(&handler.refined_1_cond);
+        pthread_mutex_unlock(&handler.refined_1_mutex);
+    }
+    return NULL;
+}
+
+void *refined_approx_2(void *arg) {
+    CommandHandler &handler = *(CommandHandler *)arg;
+    while (true) {
+        pthread_mutex_lock(&handler.refined_2_mutex);
+        while(handler.is_refined_2_produced && !handler.is_input_finished) {
+            pthread_cond_wait(&handler.refined_2_cond, &handler.refined_2_mutex);
+        }
+        if (handler.is_input_finished) {
+            return NULL;
+        }
+        handler.print_refined_approx_2();
+        handler.is_refined_2_produced = true;
+        pthread_cond_signal(&handler.refined_2_cond);
+        pthread_mutex_unlock(&handler.refined_2_mutex);
+    }
+    return NULL;
 }
 
 int main(int argc, char **argv) {
     CommandHandler handler;
-    std::thread thread_input(input, std::ref(handler));
-    std::thread thread_cnf_sat(cnf_sat, std::ref(handler));
-    std::thread thread_cnf_3_sat(cnf_3_sat, std::ref(handler));
-    std::thread thread_approx_1(approx_1, std::ref(handler));
-    std::thread thread_approx_2(approx_2, std::ref(handler));
-    std::thread thread_refined_approx_1(refined_approx_1, std::ref(handler));
-    std::thread thread_refined_approx_2(refined_approx_2, std::ref(handler));
+    pthread_t thread_input;
+    pthread_t thread_cnf_sat;
+    pthread_t thread_cnf_3_sat;
+    pthread_t thread_approx_1;
+    pthread_t thread_approx_2;
+    pthread_t thread_refined_approx_1;
+    pthread_t thread_refined_approx_2;
 
-    thread_input.join();
-    thread_cnf_sat.join();
-    thread_cnf_3_sat.join();
-    thread_approx_1.join();
-    thread_approx_2.join();
-    thread_refined_approx_1.join();
-    thread_refined_approx_2.join();
+    pthread_create(&thread_input, NULL,input,(void *)&handler);
+    pthread_create(&thread_cnf_sat, NULL,cnf_sat,(void *)&handler);
+    pthread_create(&thread_cnf_3_sat, NULL,cnf_3_sat,(void *)&handler);
+    pthread_create(&thread_approx_1, NULL,approx_1,(void *)&handler);
+    pthread_create(&thread_approx_2, NULL,approx_2,(void *)&handler);
+    pthread_create(&thread_refined_approx_1, NULL,refined_approx_1,(void *)&handler);
+    pthread_create(&thread_refined_approx_2, NULL,refined_approx_2,(void *)&handler);
+
+
+    pthread_join(thread_input, NULL);
+    pthread_join(thread_cnf_sat, NULL);
+    pthread_join(thread_cnf_3_sat, NULL);
+    pthread_join(thread_approx_1, NULL);
+    pthread_join(thread_approx_2, NULL);
+    pthread_join(thread_refined_approx_1, NULL);
+    pthread_join(thread_refined_approx_2, NULL);
+
+    pthread_cond_destroy(&handler.cnf_cond);
+    pthread_cond_destroy(&handler.cnf_3_cond);
+    pthread_cond_destroy(&handler.approx_1_cond);
+    pthread_cond_destroy(&handler.approx_2_cond);
+    pthread_cond_destroy(&handler.refined_1_cond);
+    pthread_cond_destroy(&handler.refined_2_cond);
+
     return 0;
 }

@@ -3,26 +3,27 @@
 #include "constants.hpp"
 #include "graph.hpp"
 #include <mutex>
-#include <condition_variable>
+#include <pthread.h>
+
 class CommandHandler {
     protected:
         Graph *g;
         bool is_entered_V_valid;
     public: 
         CommandHandler();
-        std::mutex input_mutex;
-        std::mutex cnf_mutex;
-        std::mutex cnf_3_mutex;
-        std::mutex approx_1_mutex;
-        std::mutex approx_2_mutex;
-        std::mutex refined_1_mutex;
-        std::mutex refined_2_mutex;
-        std::condition_variable cnf_cond;
-        std::condition_variable cnf_3_cond;
-        std::condition_variable approx_1_cond;
-        std::condition_variable approx_2_cond;
-        std::condition_variable refined_1_cond;
-        std::condition_variable refined_2_cond;
+        pthread_mutex_t input_mutex;
+        pthread_mutex_t cnf_mutex;
+        pthread_mutex_t cnf_3_mutex;
+        pthread_mutex_t approx_1_mutex;
+        pthread_mutex_t approx_2_mutex;
+        pthread_mutex_t refined_1_mutex;
+        pthread_mutex_t refined_2_mutex;
+        pthread_cond_t cnf_cond;
+        pthread_cond_t cnf_3_cond;
+        pthread_cond_t approx_1_cond;
+        pthread_cond_t approx_2_cond;
+        pthread_cond_t refined_1_cond;
+        pthread_cond_t refined_2_cond;
         bool is_graph_initialized;
         bool is_cnf_produced;
         bool is_cnf_3_produced;
