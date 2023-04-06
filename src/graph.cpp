@@ -444,6 +444,8 @@ std::vector<int> Graph::approx_vc_1() {
         //step 3
         remove_vertex(max_index, graph_copy);
     }
+    //sort the vector 
+    std::sort(vertextCover.begin(), vertextCover.end());
     return vertextCover;
 }
 
@@ -527,6 +529,9 @@ std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover) 
             vertextCover.erase(it);
         }
     }
+
+    //sort the vector
+    std::sort(vertextCover.begin(), vertextCover.end());
     return vertextCover;
 }
 
