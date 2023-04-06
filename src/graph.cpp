@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <time.h>
 
 Graph::Graph() {
     size = -1;
@@ -207,7 +208,7 @@ std::string Graph::print_shortest_path(int src, int des) {
     
 }
 /*Reference here: https://git.uwaterloo.ca/ece650-1231/minisat-demo/-/blob/master/ece650-minisat.cpp */
-bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
+bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, CNF_type type, std::string& message) {
     //n × k atomic propositions
     Minisat::Var atomic_pro[size][k];
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
@@ -233,7 +234,7 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
             cl.push(l);
         }
 
-        if(!is3CNF){
+        if(type == cnf){
             solver->addClause(cl); 
         }
 
@@ -320,7 +321,7 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
             clause1.push(l2);
         }
 
-        if(!is3CNF){
+        if(type == cnf){
             solver->addClause(clause1); 
         }
 
@@ -377,48 +378,36 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
     return satisfiable;
 }
 
-std::vector<int> Graph::cnf_sat_vc() {
+std::string Graph::solve_cnf_sat(CNF_type type) {
     int min_k = 1;
     int max_k = graph.size();
     std::vector<int> verticles;
     std::vector<int> result;
+    std::string message;
     //determine the minimum size by binary search
     while (min_k <= max_k) {
         int mid_k = (min_k + max_k) / 2;
-        bool satisfiable = is_vertex_cover(mid_k,verticles,false);
+        bool satisfiable = is_vertex_cover(mid_k,verticles,type, message);
         if (satisfiable) {
             max_k = mid_k - 1;
             result = verticles; //keep the latest satisfiable list
             verticles.clear();
         } else {
+            if (message == timeout) {
+                return timeout;
+            }
             min_k = mid_k + 1;
         }
     }
     //sort vertex cover vector
     std::sort(result.begin(), result.end());
-    return result;
-}
+    std::string string_verticles;
 
-std::vector<int> Graph::cnf_3_sat_vc() {
-    int min_k = 1;
-    int max_k = graph.size();
-    std::vector<int> verticles;
-    std::vector<int> result;
-    //determine the minimum size by binary search
-    while (min_k <= max_k) {
-        int mid_k = (min_k + max_k) / 2;
-        bool satisfiable = is_vertex_cover(mid_k,verticles,true);
-        if (satisfiable) {
-            max_k = mid_k - 1;
-            result = verticles; //keep the latest satisfiable list
-            verticles.clear();
-        } else {
-            min_k = mid_k + 1;
-        }
+    for (int i = 0;i<result.size();i++) {
+        string_verticles += std::to_string(result[i]) + " "; 
     }
-    //sort vertex cover vector
-    std::sort(result.begin(), result.end());
-    return result;
+    string_verticles += "\n";
+    return string_verticles;
 }
 
 std::vector<LinkedList *> Graph::copy() {
@@ -547,22 +536,13 @@ std::vector<int> Graph::refined_approx_vc_2() {
 }
 
 std::string Graph::print_cnf_sat() {
-    std::vector<int> cnf_verticles = cnf_sat_vc();
-    std::string result = cnf_prefix;
-    for (int i = 0;i<cnf_verticles.size();i++) {
-        result += std::to_string(cnf_verticles[i]) + " "; 
-    }
-    result += "\n";
+    std::string result = cnf_prefix + solve_cnf_sat(cnf);
+    
     return result;
 }
 
 std::string Graph::print_cnf_3_sat() {
-    std::vector<int> cnf_3_verticles = cnf_3_sat_vc();
-    std::string result = cnf_3_prefix;
-    for (int i = 0;i<cnf_3_verticles.size();i++) {
-        result += std::to_string(cnf_3_verticles[i]) + " "; 
-    }
-    result += "\n";
+    std::string result = cnf_3_prefix + solve_cnf_sat(cnf_3);
     return result;
 }
 
