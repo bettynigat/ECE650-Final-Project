@@ -589,6 +589,21 @@ std::vector<int> Graph::approx_vc_1() {
 std::vector<int> Graph::approx_vc_2() {
     
     std::vector<int> vertextCover;
+    std::vector<LinkedList*> graph_copy = copy();
+    int i = 0;
+    while (!is_graph_empty(graph_copy)) {  //step 4
+        LinkedList *l = graph_copy[i];
+        Node *n = l->head;
+        if (l->length > 0) {
+            int val = n->val;
+            vertextCover.push_back(i);
+            vertextCover.push_back(val);
+            remove_vertex(i, graph_copy);
+            remove_vertex(val, graph_copy);
+        }
+        i++;
+    }
+    /*
     int num_edges = internal_edges.size()/2; 
 
     //keep record of deleted edges that are incident on a v in vertext cover 
@@ -631,7 +646,8 @@ std::vector<int> Graph::approx_vc_2() {
             break; 
         }
     }
-    
+    */
+    std::sort(vertextCover.begin(), vertextCover.end());
     return vertextCover;
 }
         

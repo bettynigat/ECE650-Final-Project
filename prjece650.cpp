@@ -10,15 +10,16 @@
 #include <time.h>
 #include <functional>
 
-// double get_running_time(std::function<void(void*)> func) {
-//     clockid_t clockid;
-//     pthread_getcpuclockid(pthread_self(), &clockid);
-//     struct timespec start, end;
-//     clock_gettime(clockid, &start);
-//     func(nullptr);
-//     clock_gettime(clockid, &end);
-//     return (double) (end.tv_sec - start.tv_sec) + (double)(end.tv_nsec - start.tv_nsec) / 1e9;
-// }
+double get_running_time(std::function<void(void*)> func) {
+    clockid_t clockid;
+    pthread_getcpuclockid(pthread_self(), &clockid);
+    struct timespec start, end;
+    clock_gettime(clockid, &start);
+    func(nullptr);
+    clock_gettime(clockid, &end);
+    double running_time =  (double) (end.tv_sec - start.tv_sec) + (double)(end.tv_nsec - start.tv_nsec) / 1e9;
+    return running_time * 1000.0;
+}
 pthread_mutex_t input_mutex;
 pthread_mutex_t cnf_mutex;
 pthread_mutex_t cnf_3_mutex;
@@ -51,6 +52,7 @@ void *input(void *arg) {
             if (handler.parse_line(line, cmd, arg, error_msg)) {
                 bool isValid = handler.process_command(cmd,arg,error_msg);
                 if (handler.is_graph_initialized) {
+                    handler.matrix_add_value();
                     pthread_mutex_unlock(&input_mutex);
                     handler.is_cnf_produced = false;
                     handler.is_cnf_3_produced = false;
@@ -60,6 +62,11 @@ void *input(void *arg) {
                     pthread_cond_broadcast(&cnf_3_cond);
                     pthread_cond_broadcast(&approx_1_cond);
                     pthread_cond_broadcast(&approx_2_cond);
+
+                    while (!handler.is_computing_finished()) //slow down input thread a little bit to wait for 6 threads finishing their jobs before proceeding to the next input 
+                    {
+                        //do nothing
+                    }  
                 }
             }
             else {
@@ -72,6 +79,10 @@ void *input(void *arg) {
     }
 
     handler.is_input_finished = true;
+    //write to file
+    handler.matrix_add_value();
+    handler.save_data();
+
     pthread_mutex_unlock(&input_mutex);
     pthread_cond_broadcast(&cnf_cond);
     pthread_cond_broadcast(&cnf_3_cond);
@@ -95,10 +106,10 @@ void *cnf_sat(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        // double cpu_time = get_running_time([&handler](void *) { handler.print_cnf_sat(); });
-
+        double cpu_time = get_running_time([&handler](void *) { handler.print_cnf_sat(); });
+        handler.columns_set_value(cpu_time, case_cnf);
         // std::cout << "CNF CPU time " << cpu_time << std::endl;
-        handler.print_cnf_sat();
+        // handler.print_cnf_sat();
         handler.is_cnf_produced = true; 
         pthread_cond_signal(&cnf_cond);
         pthread_mutex_unlock(&cnf_mutex);
@@ -118,7 +129,10 @@ void *cnf_3_sat(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        handler.print_cnf_3_sat();
+        double running_time = get_running_time([&handler](void *) { handler.print_cnf_3_sat(); });
+        handler.columns_set_value(running_time, case_cnf_3);
+
+        // handler.print_cnf_3_sat();
         handler.is_cnf_3_produced = true;
         pthread_cond_signal(&cnf_3_cond);
         pthread_mutex_unlock(&cnf_3_mutex);
@@ -138,7 +152,9 @@ void *approx_1(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        handler.print_approx_1();
+        double running_time = get_running_time([&handler](void *) { handler.print_approx_1(); });
+        handler.columns_set_value(running_time, case_approx_1);
+        // handler.print_approx_1();
         
         handler.is_approx_1_produced = true;
         //broadcast to refined_approx_1 to feed it with the data
@@ -161,10 +177,11 @@ void *approx_2(void *arg) {
             pthread_cond_wait(&approx_2_cond, &approx_2_mutex);
         }
         if (handler.is_input_finished) {
-            // pthread_mutex_lock(&handler.approx_2_mutex);
             return NULL;
         }
-        handler.print_approx_2();
+        double running_time = get_running_time([&handler](void *) { handler.print_approx_2(); });
+        handler.columns_set_value(running_time, case_approx_2);
+        // handler.print_approx_2();
         handler.is_approx_2_produced = true;
         //broadcast to refined_approx_2 to feed it with the data
         pthread_cond_signal(&approx_2_cond);
@@ -188,7 +205,9 @@ void *refined_approx_1(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        handler.print_refined_approx_1();
+        double running_time = get_running_time([&handler](void *) { handler.print_refined_approx_1(); });
+        handler.columns_set_value(running_time, case_refined_approx_1);
+        // handler.print_refined_approx_1();
         handler.is_refined_1_produced = true;
         pthread_cond_signal(&refined_1_cond);
         pthread_mutex_unlock(&refined_1_mutex);
@@ -209,7 +228,9 @@ void *refined_approx_2(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        handler.print_refined_approx_2();
+        double running_time = get_running_time([&handler](void *) { handler.print_refined_approx_2(); });
+        handler.columns_set_value(running_time, case_refined_approx_2);
+        // handler.print_refined_approx_2();
         handler.is_refined_2_produced = true;
         pthread_cond_signal(&refined_2_cond);
         pthread_mutex_unlock(&refined_2_mutex);
