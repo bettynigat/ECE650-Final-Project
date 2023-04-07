@@ -22,7 +22,9 @@ class Graph {
         std::vector<int> shortest_uncycle_path(int,int, std::string &);
         std::vector<int> shortest_cycle_path(int, std::string &);
         bool is_vertex_cover(int, std::vector<int> &, CNF_type, std::string &);
+        bool is_vertex_cover_sat_3(int, std::vector<int> &, CNF_type, std::string &);
         std::string solve_cnf_sat(CNF_type);
+        std::string solve_cnf_sat_3(CNF_type);
         // std::vector<int> cnf_3_sat_vc();
         std::vector<int> approx_vc_1();
         std::vector<int> approx_vc_2();

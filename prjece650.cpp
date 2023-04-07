@@ -10,15 +10,15 @@
 #include <time.h>
 #include <functional>
 
-double get_running_time(std::function<void(void*)> func) {
-    clockid_t clockid;
-    pthread_getcpuclockid(pthread_self(), &clockid);
-    struct timespec start, end;
-    clock_gettime(clockid, &start);
-    func(nullptr);
-    clock_gettime(clockid, &end);
-    return (double) (end.tv_sec - start.tv_sec) + (double)(end.tv_nsec - start.tv_nsec) / 1e9;
-}
+// double get_running_time(std::function<void(void*)> func) {
+//     clockid_t clockid;
+//     pthread_getcpuclockid(pthread_self(), &clockid);
+//     struct timespec start, end;
+//     clock_gettime(clockid, &start);
+//     func(nullptr);
+//     clock_gettime(clockid, &end);
+//     return (double) (end.tv_sec - start.tv_sec) + (double)(end.tv_nsec - start.tv_nsec) / 1e9;
+// }
 pthread_mutex_t input_mutex;
 pthread_mutex_t cnf_mutex;
 pthread_mutex_t cnf_3_mutex;
@@ -88,14 +88,18 @@ void *cnf_sat(void *arg) {
     while (true) {
         pthread_mutex_lock(&cnf_mutex);
         while(handler.is_cnf_produced && !handler.is_input_finished) {
+            
             pthread_cond_wait(&cnf_cond, &cnf_mutex);
+            
         }
         if (handler.is_input_finished) {
             return NULL;
         }
-        double cpu_time = get_running_time([&handler](void *) { handler.print_cnf_sat(); });
-        std::cout << "CNF CPU time " << cpu_time << std::endl;
-        handler.is_cnf_produced = true;
+        // double cpu_time = get_running_time([&handler](void *) { handler.print_cnf_sat(); });
+
+        // std::cout << "CNF CPU time " << cpu_time << std::endl;
+        handler.print_cnf_sat();
+        handler.is_cnf_produced = true; 
         pthread_cond_signal(&cnf_cond);
         pthread_mutex_unlock(&cnf_mutex);
     }
@@ -138,8 +142,6 @@ void *approx_1(void *arg) {
         
         handler.is_approx_1_produced = true;
         //broadcast to refined_approx_1 to feed it with the data
-        std::cout << "VC_1 finish computing. Now i'm feeding its data to refined_vc_1" << std::endl;
-        
         pthread_cond_signal(&approx_1_cond);
         
         handler.is_refined_1_produced = false;
@@ -165,8 +167,6 @@ void *approx_2(void *arg) {
         handler.print_approx_2();
         handler.is_approx_2_produced = true;
         //broadcast to refined_approx_2 to feed it with the data
-        std::cout << "VC_2 finish computing. Now i'm feeding its data to refined_vc_2" << std::endl;
-        
         pthread_cond_signal(&approx_2_cond);
         
         handler.is_refined_2_produced = false;
