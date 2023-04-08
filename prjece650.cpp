@@ -11,24 +11,26 @@
 #include <functional>
 
 //return in micro seconds
-double get_running_time(std::function<void(void*)> func) {
+double get_running_time(std::function<void(int &)> func) {
     clockid_t clockid;
     pthread_getcpuclockid(pthread_self(), &clockid);
     struct timespec start, end;
     clock_gettime(clockid, &start);
-    func(nullptr);
+    int i = 0;
+    func(i);
     clock_gettime(clockid, &end);
     return (double) (end.tv_sec - start.tv_sec) * 1e6 + (double)(end.tv_nsec - start.tv_nsec) / 1e3;
 
 }
 
 //return in micro seconds
-double get_running_time_for_cnf(std::function<std::string(void*)> func) {
+double get_running_time_for_cnf(std::function<std::string(int &)> func) {
     clockid_t clockid;
     pthread_getcpuclockid(pthread_self(), &clockid);
     struct timespec start, end;
     clock_gettime(clockid, &start);
-    func(nullptr);
+    int i = 0;
+    func(i);
     clock_gettime(clockid, &end);
     return  (double) (end.tv_sec - start.tv_sec) *1e6 + (double)(end.tv_nsec - start.tv_nsec) / 1e3;
 }
@@ -120,15 +122,16 @@ void *cnf_sat(void *arg) {
             return NULL;
         }
         std::string result;
-        double running_time = get_running_time_for_cnf([&handler, &result](void *) {
-            result = handler.print_cnf_sat();
+        int number_of_vc = 0;
+        double running_time = get_running_time_for_cnf([&handler, &result, &number_of_vc](int &) {
+            result = handler.print_cnf_sat(number_of_vc);
             return result;
         });
         std::cout << result;
         if (result.find(timeout) != std::string::npos) {  //timeout happens
-            handler.columns_set_value(timeout_duration * 1e6, case_cnf);
+            handler.columns_set_value(timeout_duration * 1e6, -1, case_cnf);
         } else {
-            handler.columns_set_value(running_time, case_cnf);
+            handler.columns_set_value(running_time, number_of_vc, case_cnf);
         }
         
         handler.is_cnf_produced = true; 
@@ -151,15 +154,16 @@ void *cnf_3_sat(void *arg) {
             return NULL;
         }
         std::string result;
-        double running_time = get_running_time_for_cnf([&handler, &result](void *) {
-            result = handler.print_cnf_3_sat();
+        int number_of_vc = 0;
+        double running_time = get_running_time_for_cnf([&handler, &result, &number_of_vc](int &) {
+            result = handler.print_cnf_3_sat(number_of_vc);
             return result;
         });
         std::cout << result;
         if (result.find(timeout) != std::string::npos) { //timeout happens, then log timeout duration (in microsecond)
-            handler.columns_set_value(timeout_duration * 1e6, case_cnf_3);
+            handler.columns_set_value(timeout_duration * 1e6, -1, case_cnf_3);
         } else {
-            handler.columns_set_value(running_time, case_cnf_3);
+            handler.columns_set_value(running_time,number_of_vc , case_cnf_3);
         }
         // handler.print_cnf_3_sat();
         handler.is_cnf_3_produced = true;
@@ -181,8 +185,9 @@ void *approx_1(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        double running_time = get_running_time([&handler](void *) { handler.print_approx_1(); });
-        handler.columns_set_value(running_time, case_approx_1);
+        int number_of_vc = 0;
+        double running_time = get_running_time([&handler, &number_of_vc](int &) { handler.print_approx_1(number_of_vc); });
+        handler.columns_set_value(running_time, number_of_vc, case_approx_1);
         // handler.print_approx_1();
         
         handler.is_approx_1_produced = true;
@@ -208,8 +213,9 @@ void *approx_2(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        double running_time = get_running_time([&handler](void *) { handler.print_approx_2(); });
-        handler.columns_set_value(running_time, case_approx_2);
+        int number_of_vc = 0;
+        double running_time = get_running_time([&handler, &number_of_vc](int &) { handler.print_approx_2(number_of_vc); });
+        handler.columns_set_value(running_time, number_of_vc, case_approx_2);
         // handler.print_approx_2();
         handler.is_approx_2_produced = true;
         //broadcast to refined_approx_2 to feed it with the data
@@ -234,8 +240,9 @@ void *refined_approx_1(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        double running_time = get_running_time([&handler](void *) { handler.print_refined_approx_1(); });
-        handler.columns_set_value(running_time, case_refined_approx_1);
+        int number_of_vc = 0;
+        double running_time = get_running_time([&handler, &number_of_vc](int &) { handler.print_refined_approx_1(number_of_vc); });
+        handler.columns_set_value(running_time, number_of_vc, case_refined_approx_1);
         // handler.print_refined_approx_1();
         handler.is_refined_1_produced = true;
         pthread_cond_signal(&refined_1_cond);
@@ -257,8 +264,9 @@ void *refined_approx_2(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        double running_time = get_running_time([&handler](void *) { handler.print_refined_approx_2(); });
-        handler.columns_set_value(running_time, case_refined_approx_2);
+        int number_of_vc = 0;
+        double running_time = get_running_time([&handler, &number_of_vc](int &) { handler.print_refined_approx_2(number_of_vc); });
+        handler.columns_set_value(running_time,number_of_vc, case_refined_approx_2);
         // handler.print_refined_approx_2();
         handler.is_refined_2_produced = true;
         pthread_cond_signal(&refined_2_cond);

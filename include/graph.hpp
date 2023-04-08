@@ -23,14 +23,13 @@ class Graph {
         std::vector<int> shortest_cycle_path(int, std::string &);
         bool is_vertex_cover(int, std::vector<int> &, CNF_type, std::string &);
         bool is_vertex_cover_sat_3(int, std::vector<int> &, CNF_type, std::string &);
-        std::string solve_cnf_sat(CNF_type);
-        std::string solve_cnf_sat_3(CNF_type);
-        // std::vector<int> cnf_3_sat_vc();
-        std::vector<int> approx_vc_1();
-        std::vector<int> approx_vc_2();
-        std::vector<int> refined_approx_vc_1();
-        std::vector<int> refined_approx_vc_2();
-        std::vector<int> refine_vertext_cover_set(std::vector<int>);
+        std::string solve_cnf_sat(CNF_type, int &);
+        std::string solve_cnf_sat_3(CNF_type, int &);
+        std::vector<int> approx_vc_1(int &);
+        std::vector<int> approx_vc_2(int &);
+        std::vector<int> refined_approx_vc_1(int &);
+        std::vector<int> refined_approx_vc_2(int &);
+        std::vector<int> refine_vertext_cover_set(std::vector<int>, int &);
         bool is_graph_empty(std::vector<LinkedList *>);
 
     public:
@@ -45,12 +44,12 @@ class Graph {
         std::vector<LinkedList *> get_graph();
         std::string print_shortest_path(int,int);
         
-        std::string print_cnf_sat();
-        std::string print_cnf_3_sat();
-        std::string print_approx_1();
-        std::string print_approx_2();
-        std::string print_refined_approx_1();
-        std::string print_refined_approx_2();
+        std::string print_cnf_sat(int &);
+        std::string print_cnf_3_sat(int &);
+        std::string print_approx_1(int &);
+        std::string print_approx_2(int &);
+        std::string print_refined_approx_1(int &);
+        std::string print_refined_approx_2(int &);
 
 
 };

@@ -483,7 +483,7 @@ bool Graph::is_vertex_cover_sat_3(int k, std::vector<int> &verticles, CNF_type t
     return satisfiable;
 }
 
-std::string Graph::solve_cnf_sat(CNF_type type) {
+std::string Graph::solve_cnf_sat(CNF_type type, int &number_of_vc) {
     int min_k = 1;
     int max_k = graph.size();
     std::vector<int> verticles;
@@ -506,6 +506,7 @@ std::string Graph::solve_cnf_sat(CNF_type type) {
     }
     //sort vertex cover vector
     std::sort(result.begin(), result.end());
+    number_of_vc = result.size();
     std::string string_verticles;
 
     for (int i = 0;i<result.size();i++) {
@@ -515,7 +516,7 @@ std::string Graph::solve_cnf_sat(CNF_type type) {
     return string_verticles;
 }
 
-std::string Graph::solve_cnf_sat_3(CNF_type type) {
+std::string Graph::solve_cnf_sat_3(CNF_type type, int &number_of_vc) {
     int min_k = 1;
     int max_k = graph.size();
     std::vector<int> verticles;
@@ -538,6 +539,7 @@ std::string Graph::solve_cnf_sat_3(CNF_type type) {
     }
     //sort vertex cover vector
     std::sort(result.begin(), result.end());
+    number_of_vc = result.size();
     std::string string_verticles;
 
     for (int i = 0;i<result.size();i++) {
@@ -556,7 +558,7 @@ std::vector<LinkedList *> Graph::copy() {
     return graph_copy;
 }
 
-std::vector<int> Graph::approx_vc_1() {
+std::vector<int> Graph::approx_vc_1(int &number_of_vc) {
     /*
         1.get vertex with highest degree
         2. add to vertex cover list
@@ -583,10 +585,11 @@ std::vector<int> Graph::approx_vc_1() {
     }
     //sort the vector 
     std::sort(vertextCover.begin(), vertextCover.end());
+    number_of_vc = vertextCover.size();
     return vertextCover;
 }
 
-std::vector<int> Graph::approx_vc_2() {
+std::vector<int> Graph::approx_vc_2(int &number_of_vc) {
     
     std::vector<int> vertextCover;
     std::vector<LinkedList*> graph_copy = copy();
@@ -648,16 +651,16 @@ std::vector<int> Graph::approx_vc_2() {
     }
     */
     std::sort(vertextCover.begin(), vertextCover.end());
+    number_of_vc = vertextCover.size();
     return vertextCover;
 }
         
-std::vector<int> Graph::refined_approx_vc_1() {
-
-    std::vector<int> vertextCover =  approx_vc_1();     
-    return refine_vertext_cover_set(vertextCover);
+std::vector<int> Graph::refined_approx_vc_1(int &number_of_vc) {
+    std::vector<int> vertextCover =  approx_vc_1(number_of_vc);     
+    return refine_vertext_cover_set(vertextCover, number_of_vc);
 }
 
-std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover) {
+std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover, int &number_of_vc) {
     std::vector<int> removedVerticels;
     for (auto& vertex: vertextCover) { 
         bool is_vc = true;
@@ -685,27 +688,28 @@ std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover) 
 
     //sort the vector
     std::sort(vertextCover.begin(), vertextCover.end());
+    number_of_vc = vertextCover.size();
     return vertextCover;
 }
 
-std::vector<int> Graph::refined_approx_vc_2() { 
-    std::vector<int> vertextCover = approx_vc_2();    
-    return refine_vertext_cover_set(vertextCover);
+std::vector<int> Graph::refined_approx_vc_2(int &number_of_vc) { 
+    std::vector<int> vertextCover = approx_vc_2(number_of_vc);    
+    return refine_vertext_cover_set(vertextCover, number_of_vc);
 }
 
-std::string Graph::print_cnf_sat() {
-    std::string result = cnf_prefix + solve_cnf_sat(cnf);
+std::string Graph::print_cnf_sat(int &number_of_vc) {
+    std::string result = cnf_prefix + solve_cnf_sat(cnf, number_of_vc);
     
     return result;
 }
 
-std::string Graph::print_cnf_3_sat() {
-    std::string result = cnf_3_prefix + solve_cnf_sat_3(cnf_3);
+std::string Graph::print_cnf_3_sat(int &number_of_vc) {
+    std::string result = cnf_3_prefix + solve_cnf_sat_3(cnf_3, number_of_vc);
     return result;
 }
 
-std::string Graph::print_approx_1() {
-    std::vector<int> approx_1_verticles = approx_vc_1();
+std::string Graph::print_approx_1(int &number_of_vc) {
+    std::vector<int> approx_1_verticles = approx_vc_1(number_of_vc);
     std::string result = approx_1_prefix;
     for (int i = 0;i<approx_1_verticles.size();i++) {
         result += std::to_string(approx_1_verticles[i]) + " "; 
@@ -714,8 +718,8 @@ std::string Graph::print_approx_1() {
     return result;
 }
 
-std::string Graph::print_approx_2() {
-    std::vector<int> approx_2_verticles = approx_vc_2();
+std::string Graph::print_approx_2(int &number_of_vc) {
+    std::vector<int> approx_2_verticles = approx_vc_2(number_of_vc);
     std::string result = approx_2_prefix;
     for (int i = 0;i<approx_2_verticles.size();i++) {
         result += std::to_string(approx_2_verticles[i]) + " "; 
@@ -724,8 +728,8 @@ std::string Graph::print_approx_2() {
     return result;
 }
 
-std::string Graph::print_refined_approx_1() {
-    std::vector<int> refined_1_verticles = refined_approx_vc_1();
+std::string Graph::print_refined_approx_1(int &number_of_vc) {
+    std::vector<int> refined_1_verticles = refined_approx_vc_1(number_of_vc);
     std::string result = refined_1_prefix;
     for (int i = 0;i<refined_1_verticles.size();i++) {
         result += std::to_string(refined_1_verticles[i]) + " "; 
@@ -734,8 +738,8 @@ std::string Graph::print_refined_approx_1() {
     return result;
 }
 
-std::string Graph::print_refined_approx_2() {
-    std::vector<int> refined_2_verticles = refined_approx_vc_2();
+std::string Graph::print_refined_approx_2(int &number_of_vc) {
+    std::vector<int> refined_2_verticles = refined_approx_vc_2(number_of_vc);
     std::string result = refined_2_prefix;
     for (int i = 0;i<refined_2_verticles.size();i++) {
         result += std::to_string(refined_2_verticles[i]) + " "; 
