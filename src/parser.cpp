@@ -248,7 +248,7 @@ void CommandHandler::save_data() {
             refined_1_ratio = refined_1_ratio/matrix_cv.size();
             refined_2_ratio = refined_2_ratio/matrix_cv.size();
 
-            myfile << "Mean after " << std::to_string(matrix.size()) << " runs:";
+            // myfile << "Mean after " << std::to_string(matrix.size()) << " runs:";
             myfile << std::to_string(cnf_average) << " " << std::to_string(cnf_3_average) << " " << std::to_string(approx_1_average) << " " << std::to_string(approx_2_average) << " " << std::to_string(refined_1_average) << " " << std::to_string(refined_2_average) << " " << std::endl;
             
             
@@ -288,11 +288,11 @@ void CommandHandler::save_data() {
             refined_2_variance = std::sqrt(refined_2_variance);
 
             //calculate stadard deviation
-            myfile << "Standard deviation after " << std::to_string(matrix.size()) << " runs:";
+            // myfile << "Standard deviation after " << std::to_string(matrix.size()) << " runs:";
             myfile << std::to_string(cnf_variance) << " " << std::to_string(cnf_3_variance) << " " << std::to_string(approx_1_variance) << " " << std::to_string(approx_2_variance) << " " << std::to_string(refined_1_variance) << " " << std::to_string(refined_2_variance) << " " << std::endl;
  
-            myfile << "Approx ratio after " << std::to_string(matrix_cv.size()) << " runs:";
-            myfile << std::to_string(approx_1_ratio) << " " << std::to_string(approx_2_ratio) << " " << std::to_string(refined_1_ratio) << " " << std::to_string(refined_2_ratio) << std::endl;
+            // myfile << "Approx ratio after " << std::to_string(matrix_cv.size()) << " runs:";
+            myfile << "1" << " " <<"1"<< " "  << std::to_string(approx_1_ratio) << " " << std::to_string(approx_2_ratio) << " " << std::to_string(refined_1_ratio) << " " << std::to_string(refined_2_ratio) << std::endl;
 
             // myfile << "Approximation ratio's standard deviation after " << std::to_string(matrix.size()) << " runs:";
             //calculate approx ratio
