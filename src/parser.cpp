@@ -5,6 +5,7 @@
 #include <chrono>
 #include <thread>
 #include <fstream>
+#include <cmath>
 
 bool CommandHandler::parse_line(const std::string &line, char &cmd, std::vector<int> &arg, std::string &error) {
     std::istringstream stream(line);
@@ -168,7 +169,13 @@ void CommandHandler::save_data() {
         double approx_2_average = 0;
         double refined_1_average = 0;
         double refined_2_average = 0;
-        
+        double cnf_variance = 0;
+        double cnf_3_variance = 0;
+        double approx_1_variance = 0;
+        double approx_2_variance = 0;
+        double refined_1_variance = 0;
+        double refined_2_variance = 0;
+
         myfile << "CNF-SAT-VC CNF-3-SAT-VC APPROX-VC-1 APPROX-VC-2 REFINED-APPROX-VC-1 REFINED-APPROX-VC-2\n"; 
         for (int i = 0;i<matrix.size();i++) {
             std::vector<double> data = matrix[i];
@@ -188,18 +195,73 @@ void CommandHandler::save_data() {
                 }else {
                     refined_2_average += time;
                 }
-                time_in_string += std::to_string(time) + " ";
             }
-            time_in_string += "\n";
-            myfile << time_in_string;
             
             
         }
 
         myfile << "Average after " << std::to_string(matrix.size()) << " runs:";
         if (matrix.size() > 0) {
-            myfile << std::to_string(cnf_average/matrix.size()) << " " << std::to_string(cnf_3_average/matrix.size()) << " " << std::to_string(approx_1_average/matrix.size()) << " " << std::to_string(approx_2_average/matrix.size()) << " " << std::to_string(refined_1_average/matrix.size()) << " " << std::to_string(refined_2_average/matrix.size()) << " " << std::endl;
+            cnf_average = cnf_average/matrix.size();
+            cnf_3_average = cnf_3_average/matrix.size();
+            approx_1_average = approx_1_average/matrix.size();
+            approx_2_average = approx_2_average/matrix.size();
+            refined_1_average = refined_1_average/matrix.size();
+            refined_2_average = refined_2_average/matrix.size();
+
+            myfile << std::to_string(cnf_average) << " " << std::to_string(cnf_3_average) << " " << std::to_string(approx_1_average) << " " << std::to_string(approx_2_average) << " " << std::to_string(refined_1_average) << " " << std::to_string(refined_2_average) << " " << std::endl;
+            
+            
+            for (int i = 0;i<matrix.size();i++) {
+                std::vector<double> data = matrix[i];
+                std::string time_in_string;
+                for (int i = 0;i<matrix.size();i++) {
+                    double time = data[i];
+                    if (i==0) {
+                        cnf_variance += std::pow(time-cnf_average,2);
+                    } else if (i == 1) {
+                        cnf_3_variance += std::pow(time-cnf_3_average,2);
+                    }else if (i == 2) {
+                        approx_1_variance += std::pow(time-approx_1_average,2);
+                    }else if (i == 3) {
+                        approx_2_variance += std::pow(time-approx_2_average,2);
+                    }else if (i == 4) {
+                        refined_1_variance += std::pow(time-refined_1_average,2);
+                    }else {
+                        refined_2_variance += std::pow(time-refined_2_average,2);
+                    }
+                }
+            }
+
+            cnf_variance /= matrix.size();
+            cnf_3_variance /= matrix.size();
+            approx_1_variance /= matrix.size();
+            approx_2_variance /= matrix.size();
+            refined_1_variance /= matrix.size();
+            refined_2_variance /= matrix.size();
+
+            cnf_variance = std::sqrt(cnf_variance);
+            cnf_3_variance = std::sqrt(cnf_3_variance);
+            approx_1_variance = std::sqrt(approx_1_variance);
+            approx_2_variance = std::sqrt(approx_2_variance);
+            refined_1_variance = std::sqrt(refined_1_variance);
+            refined_2_variance = std::sqrt(refined_2_variance);
+
+            //calculate stadard deviation
+            myfile << "Standard deviation after " << std::to_string(matrix.size()) << " runs:";
+            myfile << std::to_string(cnf_variance) << " " << std::to_string(cnf_3_variance) << " " << std::to_string(approx_1_variance) << " " << std::to_string(approx_2_variance) << " " << std::to_string(refined_1_variance) << " " << std::to_string(refined_2_variance) << " " << std::endl;
+
+            // myfile << "Approximation ratio after " << std::to_string(matrix.size()) << " runs:";
+            //calculate approx ratio 
+            
+
+
+            // myfile << "Approximation ratio's standard deviation after " << std::to_string(matrix.size()) << " runs:";
+            //calculate approx ratio
+
         }
+        
+
         myfile.close();
     } 
 }
