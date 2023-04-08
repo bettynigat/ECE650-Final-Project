@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <time.h>
+#include <future>
+#include <chrono>
 
 Graph::Graph() {
     size = -1;
@@ -207,7 +210,7 @@ std::string Graph::print_shortest_path(int src, int des) {
     
 }
 /*Reference here: https://git.uwaterloo.ca/ece650-1231/minisat-demo/-/blob/master/ece650-minisat.cpp */
-bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
+bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, CNF_type type, std::string& message) {
     //n × k atomic propositions
     Minisat::Var atomic_pro[size][k];
     std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
@@ -233,45 +236,8 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
             cl.push(l);
         }
 
-        if(!is3CNF){
-            solver->addClause(cl); 
-        }
-
-        else{
-            if (cl.size() <=3){
-                solver->addClause(cl);
-            }
-
-            else {
-                Minisat::Lit B[cl.size()]; //bo, b1, .... bn
-                for (int l=0; l<cl.size(); l++){ // initialize the variables
-                    B[l] = Minisat::mkLit(solver->newVar()); 
-                }
-
-                for (int l=0; l<cl.size(); l++){ // initialize the variables
-                    Minisat::vec<Minisat::Lit> tempClause;
-                    if (l==0){
-                        tempClause.push(cl[0]); 
-                        tempClause.push(B[0]); 
-                        //L(0) v b(0)
-                        solver->addClause(tempClause);
-                    }
-                    else if (l==cl.size()-1){//last clause
-                        tempClause.push(~B[l-1]);
-                        tempClause.push(cl[l]);
-                        //~b(n-1) v L(n)
-                        solver->addClause(tempClause);
-                    }
-                    else { //in the middle 
-                        tempClause.push(~B[l-1]);
-                        tempClause.push(cl[l]);
-                        tempClause.push(B[l]);
-                        //~b(n-1) v L(n) v b[n]
-                        solver->addClause(tempClause);
-                    }
-                }
-            } 
-        }
+        
+        solver->addClause(cl);
     }
 
      /*clause 2:
@@ -320,11 +286,142 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
             clause1.push(l2);
         }
 
-        if(!is3CNF){
-            solver->addClause(clause1); 
+        solver->addClause(clause1); 
+    }
+    std::future<bool> fut = std::async(std::launch::async, [&solver]() {
+        return solver->solve();
+    });
+    // Wait for the result with a timeout
+    std::future_status status = fut.wait_for(std::chrono::duration<double>(timeout_duration));
+    
+    if (status == std::future_status::timeout) {
+        solver->interrupt();
+        // solver.reset (new Minisat::Solver());
+        message = timeout;
+        return false;
+    }
+    bool satisfiable = fut.get();
+    if (satisfiable) {
+        for (int i=0;i<size;i++) {
+            for (int j=0;j<k;j++) {
+                //find assignment 
+                if (Minisat::toInt(solver->modelValue(atomic_pro[i][j])) == 0) {
+                    verticles.push_back(i);
+                }
+            }
+        }
+    }
+    solver.reset(new Minisat::Solver());
+    return satisfiable;
+}
+
+bool Graph::is_vertex_cover_sat_3(int k, std::vector<int> &verticles, CNF_type type, std::string& message) {
+    //n × k atomic propositions
+    Minisat::Var atomic_pro[size][k];
+    std::unique_ptr<Minisat::Solver> solver(new Minisat::Solver());
+    
+
+    //initialize vars 
+    for (int i =0;i<size;i++) {
+        for (int j=0;j<k;j++) {
+            atomic_pro[i][j] = solver->newVar();
+        }
+    }
+
+    /*clause 1:
+    ∀i∈[0,k), ∀j∈[0,n) a clause(xj,i)
+    */
+
+    Minisat::vec<Minisat::Lit> cl;
+    for (int i =0;i<k;i++) {
+        cl.clear();
+        for (int j = 0;j<size;j++) {
+            //(xj,i)
+            Minisat::Lit l = Minisat::mkLit(atomic_pro[j][i]);
+            cl.push(l);
         }
 
-        else{
+            if (cl.size() <=3){
+                solver->addClause(cl);
+            }
+
+            else {
+                Minisat::Lit B[cl.size()]; //bo, b1, .... bn
+                for (int l=0; l<cl.size(); l++){ // initialize the variables
+                    B[l] = Minisat::mkLit(solver->newVar()); 
+                }
+
+                for (int l=0; l<cl.size(); l++){ // initialize the variables
+                    Minisat::vec<Minisat::Lit> tempClause;
+                    if (l==0){
+                        tempClause.push(cl[0]); 
+                        tempClause.push(B[0]); 
+                        //L(0) v b(0)
+                        solver->addClause(tempClause);
+                    }
+                    else if (l==cl.size()-1){//last clause
+                        tempClause.push(~B[l-1]);
+                        tempClause.push(cl[l]);
+                        //~b(n-1) v L(n)
+                        solver->addClause(tempClause);
+                    }
+                    else { //in the middle 
+                        tempClause.push(~B[l-1]);
+                        tempClause.push(cl[l]);
+                        tempClause.push(B[l]);
+                        //~b(n-1) v L(n) v b[n]
+                        solver->addClause(tempClause);
+                    }
+                }
+            } 
+    }
+
+     /*clause 2:
+     ∀m ∈ [0, n), ∀p, q ∈ [0, k) with p < q (aka p = q + 1, p∈[0,k-1),q ∈[p+1,k)), a clause (¬xm,p ∨ ¬xm,q)
+     */
+     for (int m = 0;m<size;m++) {
+        for (int p=0;p<k-1;p++) {
+            for (int q =p+1;q<k;q++) {
+                //xm,p
+                Minisat::Lit l1 = Minisat::mkLit(atomic_pro[m][p]);
+                //xm,q
+                Minisat::Lit l2 = Minisat::mkLit(atomic_pro[m][q]);
+                //(¬xm,p ∨ ¬xm,q)
+                solver->addClause(~l1,~l2);
+            }
+        }
+     }
+    /*clause 3: 
+    ∀m∈[0,k),∀p,q∈[0,n) with p<q (aka p = q+1, p∈[0,n-1),q ∈[p+1,n)), a clause(¬xp,m ∨ ¬xq,m)
+    */
+
+    for (int m=0;m<k;m++) {
+        for (int p = 0;p<size-1;p++) {
+            for (int q = p+1;q<size;q++) {
+                //xp,m
+                Minisat::Lit l1 = Minisat::mkLit(atomic_pro[p][m]);
+                //xq,m
+                Minisat::Lit l2 = Minisat::mkLit(atomic_pro[q][m]);
+                //(¬xp,m ∨ ¬xq,m)
+                solver->addClause(~l1,~l2);
+            }
+        }
+    }
+    /*clause 4: 
+    ∀⟨i,j⟩∈E, i and j are adjency edges,  a clause(xi,1 ∨ xi,2 ∨···∨ xi,k ∨ xj,1 ∨ xj,2 ∨···∨ xj,k)
+    */
+   Minisat::vec<Minisat::Lit> clause1;
+    for (int i = 0;i<internal_edges.size();i=i+2) {
+        clause1.clear();
+        for (int j = 0;j<k;j++) {
+            //xi,k
+            Minisat::Lit l1 = Minisat::mkLit(atomic_pro[internal_edges[i]][j]);
+            //xj,k
+            Minisat::Lit l2 = Minisat::mkLit(atomic_pro[internal_edges[i+1]][j]);
+            clause1.push(l1);
+            clause1.push(l2);
+        }
+
             if (clause1.size() <=3){
                 solver->addClause(clause1);
             }
@@ -358,10 +455,20 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
                     }
                 } 
             }
-        }
     }
+    std::future<bool> fut = std::async(std::launch::async, [&solver]() {
+        return solver->solve();
+    });
+    // Wait for the result with a timeout
+    std::future_status status = fut.wait_for(std::chrono::duration<double>(timeout_duration));
     
-    bool satisfiable = solver->solve();
+    if (status == std::future_status::timeout) {
+        solver->interrupt();
+        // solver.reset (new Minisat::Solver());
+        message = timeout;
+        return false;
+    }
+    bool satisfiable = fut.get();
     if (satisfiable) {
         for (int i=0;i<size;i++) {
             for (int j=0;j<k;j++) {
@@ -376,48 +483,68 @@ bool Graph::is_vertex_cover(int k, std::vector<int> &verticles, bool is3CNF) {
     return satisfiable;
 }
 
-std::vector<int> Graph::cnf_sat_vc() {
+std::string Graph::solve_cnf_sat(CNF_type type) {
     int min_k = 1;
     int max_k = graph.size();
     std::vector<int> verticles;
     std::vector<int> result;
+    std::string message;
     //determine the minimum size by binary search
     while (min_k <= max_k) {
         int mid_k = (min_k + max_k) / 2;
-        bool satisfiable = is_vertex_cover(mid_k,verticles,false);
+        bool satisfiable = is_vertex_cover(mid_k,verticles,type, message);
         if (satisfiable) {
             max_k = mid_k - 1;
             result = verticles; //keep the latest satisfiable list
             verticles.clear();
         } else {
+            if (message == timeout) {
+                return timeout;
+            }
             min_k = mid_k + 1;
         }
     }
     //sort vertex cover vector
     std::sort(result.begin(), result.end());
-    return result;
+    std::string string_verticles;
+
+    for (int i = 0;i<result.size();i++) {
+        string_verticles += std::to_string(result[i]) + " "; 
+    }
+    string_verticles += "\n";
+    return string_verticles;
 }
 
-std::vector<int> Graph::cnf_3_sat_vc() {
+std::string Graph::solve_cnf_sat_3(CNF_type type) {
     int min_k = 1;
     int max_k = graph.size();
     std::vector<int> verticles;
     std::vector<int> result;
+    std::string message;
     //determine the minimum size by binary search
     while (min_k <= max_k) {
         int mid_k = (min_k + max_k) / 2;
-        bool satisfiable = is_vertex_cover(mid_k,verticles,true);
+        bool satisfiable = is_vertex_cover_sat_3(mid_k,verticles,type, message);
         if (satisfiable) {
             max_k = mid_k - 1;
             result = verticles; //keep the latest satisfiable list
             verticles.clear();
         } else {
+            if (message == timeout) {
+                return timeout;
+            }
             min_k = mid_k + 1;
         }
     }
     //sort vertex cover vector
     std::sort(result.begin(), result.end());
-    return result;
+    std::string string_verticles;
+
+    for (int i = 0;i<result.size();i++) {
+        string_verticles += std::to_string(result[i]) + " "; 
+    }
+    string_verticles += "\n";
+    return string_verticles;
 }
 
 std::vector<LinkedList *> Graph::copy() {
@@ -454,12 +581,29 @@ std::vector<int> Graph::approx_vc_1() {
         //step 3
         remove_vertex(max_index, graph_copy);
     }
+    //sort the vector 
+    std::sort(vertextCover.begin(), vertextCover.end());
     return vertextCover;
 }
 
 std::vector<int> Graph::approx_vc_2() {
     
     std::vector<int> vertextCover;
+    std::vector<LinkedList*> graph_copy = copy();
+    int i = 0;
+    while (!is_graph_empty(graph_copy)) {  //step 4
+        LinkedList *l = graph_copy[i];
+        Node *n = l->head;
+        if (l->length > 0) {
+            int val = n->val;
+            vertextCover.push_back(i);
+            vertextCover.push_back(val);
+            remove_vertex(i, graph_copy);
+            remove_vertex(val, graph_copy);
+        }
+        i++;
+    }
+    /*
     int num_edges = internal_edges.size()/2; 
 
     //keep record of deleted edges that are incident on a v in vertext cover 
@@ -502,7 +646,8 @@ std::vector<int> Graph::approx_vc_2() {
             break; 
         }
     }
-    
+    */
+    std::sort(vertextCover.begin(), vertextCover.end());
     return vertextCover;
 }
         
@@ -537,6 +682,9 @@ std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover) 
             vertextCover.erase(it);
         }
     }
+
+    //sort the vector
+    std::sort(vertextCover.begin(), vertextCover.end());
     return vertextCover;
 }
 
@@ -546,28 +694,19 @@ std::vector<int> Graph::refined_approx_vc_2() {
 }
 
 std::string Graph::print_cnf_sat() {
-    std::vector<int> cnf_verticles = cnf_sat_vc();
-    std::string result = "CNF-SAT-VC: ";
-    for (int i = 0;i<cnf_verticles.size();i++) {
-        result += std::to_string(cnf_verticles[i]) + " "; 
-    }
-    result += "\n";
+    std::string result = cnf_prefix + solve_cnf_sat(cnf);
+    
     return result;
 }
 
 std::string Graph::print_cnf_3_sat() {
-    std::vector<int> cnf_3_verticles = cnf_3_sat_vc();
-    std::string result = "CNF-3-SAT-VC: ";
-    for (int i = 0;i<cnf_3_verticles.size();i++) {
-        result += std::to_string(cnf_3_verticles[i]) + " "; 
-    }
-    result += "\n";
+    std::string result = cnf_3_prefix + solve_cnf_sat_3(cnf_3);
     return result;
 }
 
 std::string Graph::print_approx_1() {
     std::vector<int> approx_1_verticles = approx_vc_1();
-    std::string result = "APPROX-VC-1: ";
+    std::string result = approx_1_prefix;
     for (int i = 0;i<approx_1_verticles.size();i++) {
         result += std::to_string(approx_1_verticles[i]) + " "; 
     }
@@ -577,7 +716,7 @@ std::string Graph::print_approx_1() {
 
 std::string Graph::print_approx_2() {
     std::vector<int> approx_2_verticles = approx_vc_2();
-    std::string result = "APPROX-VC-2: ";
+    std::string result = approx_2_prefix;
     for (int i = 0;i<approx_2_verticles.size();i++) {
         result += std::to_string(approx_2_verticles[i]) + " "; 
     }
@@ -587,7 +726,7 @@ std::string Graph::print_approx_2() {
 
 std::string Graph::print_refined_approx_1() {
     std::vector<int> refined_1_verticles = refined_approx_vc_1();
-    std::string result = "REFINED-APPROX-VC-1: ";
+    std::string result = refined_1_prefix;
     for (int i = 0;i<refined_1_verticles.size();i++) {
         result += std::to_string(refined_1_verticles[i]) + " "; 
     }
@@ -597,7 +736,7 @@ std::string Graph::print_refined_approx_1() {
 
 std::string Graph::print_refined_approx_2() {
     std::vector<int> refined_2_verticles = refined_approx_vc_2();
-    std::string result = "REFINED-APPROX-VC-2: ";
+    std::string result = refined_2_prefix;
     for (int i = 0;i<refined_2_verticles.size();i++) {
         result += std::to_string(refined_2_verticles[i]) + " "; 
     }
