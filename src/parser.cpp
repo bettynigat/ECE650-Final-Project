@@ -203,9 +203,9 @@ void CommandHandler::save_data() {
                 double time = data[i];
                 int num_vc = vcs[i];
                 if (i==0) {
-                    number_of_optimal_vc = num_vc;
                     cnf_average += time;
                 } else if (i == 1) {
+                    number_of_optimal_vc = num_vc; // change to CNF_3
                     cnf_3_average += time;
                 } else if (i == 2) {
                     approx_1_average += time;   
