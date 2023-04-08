@@ -162,15 +162,43 @@ void CommandHandler::save_data() {
     std::string fileName = "outputV" + std::to_string(g->get_size()) + ".txt";
     myfile.open(fileName, std::ios::app);
     if (myfile.is_open()) {
+        double cnf_average = 0;
+        double cnf_3_average = 0;
+        double approx_1_average = 0;
+        double approx_2_average = 0;
+        double refined_1_average = 0;
+        double refined_2_average = 0;
+        
         myfile << "CNF-SAT-VC CNF-3-SAT-VC APPROX-VC-1 APPROX-VC-2 REFINED-APPROX-VC-1 REFINED-APPROX-VC-2\n"; 
         for (int i = 0;i<matrix.size();i++) {
             std::vector<double> data = matrix[i];
             std::string time_in_string;
-            for (auto time: data) {
-                 time_in_string += std::to_string(time) + " ";
+            for (int i=0;i<data.size();i++) {
+                double time = data[i];
+                if (i==0) {
+                    cnf_average += time;
+                } else if (i == 1) {
+                    cnf_3_average += time;
+                }else if (i == 2) {
+                    approx_1_average += time;
+                }else if (i == 3) {
+                    approx_2_average += time;
+                }else if (i == 4) {
+                    refined_1_average += time;
+                }else {
+                    refined_2_average += time;
+                }
+                time_in_string += std::to_string(time) + " ";
             }
             time_in_string += "\n";
             myfile << time_in_string;
+            
+            
+        }
+
+        myfile << "Average after " << std::to_string(matrix.size()) << " runs:";
+        if (matrix.size() > 0) {
+            myfile << std::to_string(cnf_average/matrix.size()) << " " << std::to_string(cnf_3_average/matrix.size()) << " " << std::to_string(approx_1_average/matrix.size()) << " " << std::to_string(approx_2_average/matrix.size()) << " " << std::to_string(refined_1_average/matrix.size()) << " " << std::to_string(refined_2_average/matrix.size()) << " " << std::endl;
         }
         myfile.close();
     } 
