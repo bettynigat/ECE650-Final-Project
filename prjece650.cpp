@@ -10,6 +10,7 @@
 #include <time.h>
 #include <functional>
 
+//return in micro seconds
 double get_running_time(std::function<void(void*)> func) {
     clockid_t clockid;
     pthread_getcpuclockid(pthread_self(), &clockid);
@@ -17,9 +18,21 @@ double get_running_time(std::function<void(void*)> func) {
     clock_gettime(clockid, &start);
     func(nullptr);
     clock_gettime(clockid, &end);
-    double running_time =  (double) (end.tv_sec - start.tv_sec) + (double)(end.tv_nsec - start.tv_nsec) / 1e9;
-    return running_time * 1000.0;
+    return (double) (end.tv_sec - start.tv_sec) * 1e6 + (double)(end.tv_nsec - start.tv_nsec) / 1e3;
+
 }
+
+//return in micro seconds
+double get_running_time_for_cnf(std::function<std::string(void*)> func) {
+    clockid_t clockid;
+    pthread_getcpuclockid(pthread_self(), &clockid);
+    struct timespec start, end;
+    clock_gettime(clockid, &start);
+    func(nullptr);
+    clock_gettime(clockid, &end);
+    return  (double) (end.tv_sec - start.tv_sec) *1e6 + (double)(end.tv_nsec - start.tv_nsec) / 1e3;
+}
+
 pthread_mutex_t input_mutex;
 pthread_mutex_t cnf_mutex;
 pthread_mutex_t cnf_3_mutex;
@@ -106,10 +119,18 @@ void *cnf_sat(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        double cpu_time = get_running_time([&handler](void *) { handler.print_cnf_sat(); });
-        handler.columns_set_value(cpu_time, case_cnf);
-        // std::cout << "CNF CPU time " << cpu_time << std::endl;
-        // handler.print_cnf_sat();
+        std::string result;
+        double running_time = get_running_time_for_cnf([&handler, &result](void *) {
+            result = handler.print_cnf_sat();
+            return result;
+        });
+        std::cout << result;
+        if (result.find(timeout) != std::string::npos) {  //timeout happens
+            handler.columns_set_value(timeout_duration * 1e6, case_cnf);
+        } else {
+            handler.columns_set_value(running_time, case_cnf);
+        }
+        
         handler.is_cnf_produced = true; 
         pthread_cond_signal(&cnf_cond);
         pthread_mutex_unlock(&cnf_mutex);
@@ -129,9 +150,17 @@ void *cnf_3_sat(void *arg) {
         if (handler.is_input_finished) {
             return NULL;
         }
-        double running_time = get_running_time([&handler](void *) { handler.print_cnf_3_sat(); });
-        handler.columns_set_value(running_time, case_cnf_3);
-
+        std::string result;
+        double running_time = get_running_time_for_cnf([&handler, &result](void *) {
+            result = handler.print_cnf_3_sat();
+            return result;
+        });
+        std::cout << result;
+        if (result.find(timeout) != std::string::npos) { //timeout happens, then log timeout duration (in microsecond)
+            handler.columns_set_value(timeout_duration * 1e6, case_cnf_3);
+        } else {
+            handler.columns_set_value(running_time, case_cnf_3);
+        }
         // handler.print_cnf_3_sat();
         handler.is_cnf_3_produced = true;
         pthread_cond_signal(&cnf_3_cond);

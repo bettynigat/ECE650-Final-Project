@@ -113,14 +113,12 @@ bool CommandHandler::process_command(char c, std::vector<int> args, std::string 
     return true;
 }
 
-void CommandHandler::print_cnf_sat() {
-    std::string result = g->print_cnf_sat();
-    std::cout << result;
-    
+std::string CommandHandler::print_cnf_sat() {
+    return g->print_cnf_sat();
 }   
 
-void CommandHandler::print_cnf_3_sat() {
-    std::cout << g->print_cnf_3_sat();
+std::string CommandHandler::print_cnf_3_sat() {
+    return g->print_cnf_3_sat();
 }
 
 void CommandHandler::print_approx_1() {

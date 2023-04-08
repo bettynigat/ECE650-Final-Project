@@ -33,8 +33,8 @@ class CommandHandler {
         bool is_input_finished;
         bool process_command(char, std::vector<int>,std::string &);
         bool parse_line(const std::string &, char &, std::vector<int> &, std::string &);
-        void print_cnf_sat();
-        void print_cnf_3_sat(); 
+        std::string print_cnf_sat();
+        std::string print_cnf_3_sat(); 
         void print_approx_1(); 
         void print_approx_2(); 
         void print_refined_approx_1(); 
