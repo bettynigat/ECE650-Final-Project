@@ -200,7 +200,7 @@ void CommandHandler::save_data() {
             
         }
 
-        myfile << std::to_string(matrix.size()) << " runs:";
+        // myfile << std::to_string(matrix.size()) << " runs:";
         if (matrix.size() > 0) {
             cnf_average = cnf_average/matrix.size();
             cnf_3_average = cnf_3_average/matrix.size();
