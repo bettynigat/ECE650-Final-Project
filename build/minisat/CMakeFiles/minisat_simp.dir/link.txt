@@ -1,1 +1,1 @@
-/Library/Developer/CommandLineTools/usr/bin/c++  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/minisat_simp.dir/minisat/simp/Main.cc.o -o minisat  libminisat.a /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk/usr/lib/libz.tbd 
+/usr/bin/c++    -rdynamic CMakeFiles/minisat_simp.dir/minisat/simp/Main.cc.o  -o minisat  libminisat.a -lz 
