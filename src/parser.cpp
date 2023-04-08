@@ -248,7 +248,7 @@ void CommandHandler::save_data() {
             refined_2_variance = std::sqrt(refined_2_variance);
 
             //calculate stadard deviation
-            myfile << std::to_string(matrix.size()) << " runs:";
+            // myfile << std::to_string(matrix.size()) << " runs:";
             myfile << std::to_string(cnf_variance) << " " << std::to_string(cnf_3_variance) << " " << std::to_string(approx_1_variance) << " " << std::to_string(approx_2_variance) << " " << std::to_string(refined_1_variance) << " " << std::to_string(refined_2_variance) << " " << std::endl;
 
             // myfile << "Approximation ratio after " << std::to_string(matrix.size()) << " runs:";
