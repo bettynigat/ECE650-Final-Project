@@ -235,6 +235,7 @@ void CommandHandler::save_data() {
         }
         
         if (matrix.size() > 0 && matrix_cv.size()) {
+
             cnf_average = cnf_average/matrix.size();
             cnf_3_average = cnf_3_average/matrix.size();
             approx_1_average = approx_1_average/matrix.size();
@@ -289,9 +290,7 @@ void CommandHandler::save_data() {
             //calculate stadard deviation
             myfile << "Standard deviation after " << std::to_string(matrix.size()) << " runs:";
             myfile << std::to_string(cnf_variance) << " " << std::to_string(cnf_3_variance) << " " << std::to_string(approx_1_variance) << " " << std::to_string(approx_2_variance) << " " << std::to_string(refined_1_variance) << " " << std::to_string(refined_2_variance) << " " << std::endl;
-
-            // myfile << "Approximation ratio after " << std::to_string(matrix.size()) << " runs:";
-            //calculate     
+ 
             myfile << "Approx ratio after " << std::to_string(matrix_cv.size()) << " runs:";
             myfile << std::to_string(approx_1_ratio) << " " << std::to_string(approx_2_ratio) << " " << std::to_string(refined_1_ratio) << " " << std::to_string(refined_2_ratio) << std::endl;
 

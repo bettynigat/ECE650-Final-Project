@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/minisat_simp.dir/minisat/simp/Main.cc.o"
-  "CMakeFiles/minisat_simp.dir/minisat/simp/Main.cc.o.d"
   "minisat"
   "minisat.pdb"
 )

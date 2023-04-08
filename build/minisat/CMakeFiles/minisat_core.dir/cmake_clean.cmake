@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/minisat_core.dir/minisat/core/Main.cc.o"
-  "CMakeFiles/minisat_core.dir/minisat/core/Main.cc.o.d"
   "minisat_core"
   "minisat_core.pdb"
 )
