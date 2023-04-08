@@ -669,7 +669,15 @@ std::vector<int> Graph::refine_vertext_cover_set(std::vector<int> vertextCover, 
         Node *n = l->head;
         while (n != NULL) {
             int val = n->val;
-            if (std::find(vertextCover.begin(), vertextCover.end(), val) == vertextCover.end()) { //not exist mean we can not remove it 
+            std::vector<int> temp = vertextCover;
+
+            for (auto& removed_item: removedVerticels) {
+                auto it = std::find(temp.begin(), temp.end(), removed_item);
+                if (it != temp.end()) { //element exists, then remove it from vertextCover
+                    temp.erase(it);
+                }
+            }
+            if (std::find(temp.begin(), temp.end(), val) == temp.end()) { //not exist mean we can not remove it 
                 is_vc = false;
                 break;
             }
