@@ -153,8 +153,8 @@ void CommandHandler::matrix_add_value() {
         }
     }
 
-    for (auto item: columns_vc) {
-        if (item == -1.0) {
+    for (int i=0;i<columns_vc.size();i++) {
+        if (columns_vc[1] == -1) { // only take cnf_3 into account 
             is_vc_data_valid = false;
             break;
         }
@@ -167,8 +167,11 @@ void CommandHandler::matrix_add_value() {
     
     if (is_vc_data_valid) {
         matrix_cv.push_back(columns_vc); 
-        columns_vc.assign(columns_vc.size(), -1.0);
+        columns_vc.assign(columns_vc.size(), -1);
     }
+    // else {
+    //     std::cout << "matrix_cv data not valid" << std::endl;
+    // }
 }
 
 void CommandHandler::save_data() {
@@ -196,45 +199,55 @@ void CommandHandler::save_data() {
         myfile << "CNF-SAT-VC CNF-3-SAT-VC APPROX-VC-1 APPROX-VC-2 REFINED-APPROX-VC-1 REFINED-APPROX-VC-2\n"; 
         for (int i = 0;i<matrix.size();i++) {
             std::vector<double> data = matrix[i];
-            std::vector<int> vcs = matrix_cv[i];
-            std::string num_vc_in_string;
-            int number_of_optimal_vc = 0;
-            for (int i=0;i<data.size();i++) {
-                double time = data[i];
-                int num_vc = vcs[i];
-                if (i==0) {
+            for (int j=0;j<data.size();j++) {
+                double time = data[j];
+                
+                if (j==0) {
                     cnf_average += time;
-                } else if (i == 1) {
-                    number_of_optimal_vc = num_vc; // change dividend to CNF_3
+                } else if (j == 1) {
                     cnf_3_average += time;
-                } else if (i == 2) {
+                } else if (j == 2) {
                     approx_1_average += time;   
+                } else if (j == 3) {
+                    approx_2_average += time;
+                } else if (j == 4) {
+                    refined_1_average += time;
+                } else {
+                    refined_2_average += time;
+                }
+            }
+        }
+
+        for (int i = 0;i<matrix_cv.size();i++) {
+            std::vector<int> vcs = matrix_cv[i];
+            int number_of_optimal_vc = 0;
+            for (int j=0;j<vcs.size();j++) {
+                int num_vc = vcs[j];
+                if (j == 0) {
+
+                } else if (j == 1) {
+                    number_of_optimal_vc = num_vc; // change dividend to CNF_3
+                } else if (j == 2) {
                     if (number_of_optimal_vc > 0) {
                         approx_1_ratio += ((double) num_vc) / ((double) number_of_optimal_vc);
                     }
-                } else if (i == 3) {
-                    approx_2_average += time;
+                } else if (j == 3) {
                     if (number_of_optimal_vc > 0) {
                         approx_2_ratio += ((double) num_vc) / ((double) number_of_optimal_vc);
                     }
-                } else if (i == 4) {
-                    refined_1_average += time;
+                } else if (j == 4) {
                     if (number_of_optimal_vc > 0) {
                         refined_1_ratio += ((double) num_vc) / ((double) number_of_optimal_vc);
                     }
                 } else {
-                    refined_2_average += time;
                     if (number_of_optimal_vc > 0) {
                         refined_2_ratio += ((double) num_vc) / ((double) number_of_optimal_vc);
                     }
                 }
-                // num_vc_in_string += std::to_string(approx_1_ratio) + " " + std::to_string(approx_2_ratio) + " " + std::to_string(refined_1_ratio) + " " + std::to_string(refined_2_ratio) + " ";
             }
-            // num_vc_in_string += "\n";
-            // myfile << num_vc_in_string;
         }
         
-        if (matrix.size() > 0 && matrix_cv.size()) {
+        if (matrix.size() > 0 && matrix_cv.size() > 0) {
 
             cnf_average = cnf_average/matrix.size();
             cnf_3_average = cnf_3_average/matrix.size();

@@ -129,7 +129,7 @@ void *cnf_sat(void *arg) {
         });
         std::cout << result;
         if (result.find(timeout) != std::string::npos) {  //timeout happens
-            handler.columns_set_value(timeout_duration * 1e6, -1, case_cnf);
+            handler.columns_set_value(timeout_duration * 1e6, -1, case_cnf); //set -1 to discard this run from approx ratio computation
         } else {
             handler.columns_set_value(running_time, number_of_vc, case_cnf);
         }
@@ -161,7 +161,7 @@ void *cnf_3_sat(void *arg) {
         });
         std::cout << result;
         if (result.find(timeout) != std::string::npos) { //timeout happens, then log timeout duration (in microsecond)
-            handler.columns_set_value(timeout_duration * 1e6, -1, case_cnf_3);
+            handler.columns_set_value(timeout_duration * 1e6, -1, case_cnf_3); //set -1 to discard this run from approx ration computation
         } else {
             handler.columns_set_value(running_time,number_of_vc , case_cnf_3);
         }
