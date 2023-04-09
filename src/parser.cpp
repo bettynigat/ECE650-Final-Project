@@ -247,7 +247,7 @@ void CommandHandler::save_data() {
             }
         }
         
-        if (matrix.size() > 0 && matrix_cv.size() > 0) {
+        if (matrix.size() > 0) {
 
             cnf_average = cnf_average/matrix.size();
             cnf_3_average = cnf_3_average/matrix.size();
@@ -255,11 +255,6 @@ void CommandHandler::save_data() {
             approx_2_average = approx_2_average/matrix.size();
             refined_1_average = refined_1_average/matrix.size();
             refined_2_average = refined_2_average/matrix.size();
-
-            approx_1_ratio = approx_1_ratio/matrix_cv.size();
-            approx_2_ratio = approx_2_ratio/matrix_cv.size();
-            refined_1_ratio = refined_1_ratio/matrix_cv.size();
-            refined_2_ratio = refined_2_ratio/matrix_cv.size();
 
             myfile << "Mean after " << std::to_string(matrix.size()) << " runs:";
             myfile << std::to_string(cnf_average) << " " << std::to_string(cnf_3_average) << " " << std::to_string(approx_1_average) << " " << std::to_string(approx_2_average) << " " << std::to_string(refined_1_average) << " " << std::to_string(refined_2_average) << " " << std::endl;
@@ -303,15 +298,21 @@ void CommandHandler::save_data() {
             //calculate stadard deviation
             myfile << "Standard deviation after " << std::to_string(matrix.size()) << " runs:";
             myfile << std::to_string(cnf_variance) << " " << std::to_string(cnf_3_variance) << " " << std::to_string(approx_1_variance) << " " << std::to_string(approx_2_variance) << " " << std::to_string(refined_1_variance) << " " << std::to_string(refined_2_variance) << " " << std::endl;
- 
-            myfile << "Approx ratio after " << std::to_string(matrix_cv.size()) << " runs:";
-            myfile << std::to_string(approx_1_ratio) << " " << std::to_string(approx_2_ratio) << " " << std::to_string(refined_1_ratio) << " " << std::to_string(refined_2_ratio) << std::endl;
 
             // myfile << "Approximation ratio's standard deviation after " << std::to_string(matrix.size()) << " runs:";
             //calculate approx ratio
-
         }
         
+        if (matrix_cv.size() > 0) {
+            approx_1_ratio = approx_1_ratio/matrix_cv.size();
+            approx_2_ratio = approx_2_ratio/matrix_cv.size();
+            refined_1_ratio = refined_1_ratio/matrix_cv.size();
+            refined_2_ratio = refined_2_ratio/matrix_cv.size();
+
+            myfile << "Approx ratio after " << std::to_string(matrix_cv.size()) << " runs:";
+            myfile << std::to_string(approx_1_ratio) << " " << std::to_string(approx_2_ratio) << " " << std::to_string(refined_1_ratio) << " " << std::to_string(refined_2_ratio) << std::endl;
+
+        }
 
         myfile.close();
     } 
