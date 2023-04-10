@@ -4,10 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/Solver.cc" "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/CMakeFiles/minisat-lib-static.dir/minisat/core/Solver.cc.o"
-  "/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/SimpSolver.cc" "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/CMakeFiles/minisat-lib-static.dir/minisat/simp/SimpSolver.cc.o"
-  "/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils/Options.cc" "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/CMakeFiles/minisat-lib-static.dir/minisat/utils/Options.cc.o"
-  "/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils/System.cc" "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/CMakeFiles/minisat-lib-static.dir/minisat/utils/System.cc.o"
+  "/home/bnibret/myprojects/betty_quan/minisat/minisat/core/Solver.cc" "/home/bnibret/myprojects/betty_quan/build/minisat/CMakeFiles/minisat-lib-static.dir/minisat/core/Solver.cc.o"
+  "/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/SimpSolver.cc" "/home/bnibret/myprojects/betty_quan/build/minisat/CMakeFiles/minisat-lib-static.dir/minisat/simp/SimpSolver.cc.o"
+  "/home/bnibret/myprojects/betty_quan/minisat/minisat/utils/Options.cc" "/home/bnibret/myprojects/betty_quan/build/minisat/CMakeFiles/minisat-lib-static.dir/minisat/utils/Options.cc.o"
+  "/home/bnibret/myprojects/betty_quan/minisat/minisat/utils/System.cc" "/home/bnibret/myprojects/betty_quan/build/minisat/CMakeFiles/minisat-lib-static.dir/minisat/utils/System.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

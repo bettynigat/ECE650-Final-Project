@@ -148,41 +148,41 @@ sys/resource.h
 unistd.h
 -
 
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/Solver.cc
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/Solver.cc
 math.h
 -
 minisat/mtl/Alg.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/mtl/Alg.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/mtl/Alg.h
 minisat/mtl/Sort.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/mtl/Sort.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/mtl/Sort.h
 minisat/utils/System.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/utils/System.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/utils/System.h
 minisat/core/Solver.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/core/Solver.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/core/Solver.h
 
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/SimpSolver.cc
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/SimpSolver.cc
 minisat/mtl/Sort.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/minisat/mtl/Sort.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/minisat/mtl/Sort.h
 minisat/simp/SimpSolver.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/minisat/simp/SimpSolver.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/minisat/simp/SimpSolver.h
 minisat/utils/System.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/minisat/utils/System.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/minisat/utils/System.h
 
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils/Options.cc
+/home/bnibret/myprojects/betty_quan/minisat/minisat/utils/Options.cc
 minisat/mtl/Sort.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils/minisat/mtl/Sort.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/utils/minisat/mtl/Sort.h
 minisat/utils/Options.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils/minisat/utils/Options.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/utils/minisat/utils/Options.h
 minisat/utils/ParseUtils.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils/minisat/utils/ParseUtils.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/utils/minisat/utils/ParseUtils.h
 
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils/System.cc
+/home/bnibret/myprojects/betty_quan/minisat/minisat/utils/System.cc
 signal.h
 -
 stdio.h
 -
 minisat/utils/System.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils/minisat/utils/System.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/utils/minisat/utils/System.h
 stdlib.h
 -
 malloc/malloc.h

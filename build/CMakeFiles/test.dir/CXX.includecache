@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/bnibret/myprojects/project_final/betty_quan/doctest.h
+/home/bnibret/myprojects/betty_quan/doctest.h
 ciso646
 -
 iosfwd
@@ -18,7 +18,7 @@ cstddef
 type_traits
 -
 doctest_fwd.h
-/home/bnibret/myprojects/project_final/betty_quan/doctest_fwd.h
+/home/bnibret/myprojects/betty_quan/doctest_fwd.h
 ctime
 -
 cmath
@@ -72,7 +72,7 @@ unistd.h
 sys/sysctl.h
 -
 
-/home/bnibret/myprojects/project_final/betty_quan/test.cpp
+/home/bnibret/myprojects/betty_quan/test.cpp
 doctest.h
-/home/bnibret/myprojects/project_final/betty_quan/doctest.h
+/home/bnibret/myprojects/betty_quan/doctest.h
 

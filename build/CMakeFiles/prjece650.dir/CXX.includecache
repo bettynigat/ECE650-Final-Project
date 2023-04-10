@@ -160,7 +160,7 @@ zlib.h
 minisat/mtl/XAlloc.h
 ../minisat/minisat/utils/minisat/mtl/XAlloc.h
 
-/home/bnibret/myprojects/project_final/betty_quan/prjece650.cpp
+/home/bnibret/myprojects/betty_quan/prjece650.cpp
 iostream
 -
 sstream
@@ -168,9 +168,9 @@ sstream
 vector
 -
 parser.hpp
-/home/bnibret/myprojects/project_final/betty_quan/parser.hpp
+/home/bnibret/myprojects/betty_quan/parser.hpp
 constants.hpp
-/home/bnibret/myprojects/project_final/betty_quan/constants.hpp
+/home/bnibret/myprojects/betty_quan/constants.hpp
 memory
 -
 chrono
@@ -184,11 +184,11 @@ time.h
 functional
 -
 
-/home/bnibret/myprojects/project_final/betty_quan/src/graph.cpp
+/home/bnibret/myprojects/betty_quan/src/graph.cpp
 graph.hpp
-/home/bnibret/myprojects/project_final/betty_quan/src/graph.hpp
+/home/bnibret/myprojects/betty_quan/src/graph.hpp
 linkedlist.hpp
-/home/bnibret/myprojects/project_final/betty_quan/src/linkedlist.hpp
+/home/bnibret/myprojects/betty_quan/src/linkedlist.hpp
 algorithm
 -
 iostream
@@ -202,9 +202,9 @@ future
 chrono
 -
 
-/home/bnibret/myprojects/project_final/betty_quan/src/parser.cpp
+/home/bnibret/myprojects/betty_quan/src/parser.cpp
 parser.hpp
-/home/bnibret/myprojects/project_final/betty_quan/src/parser.hpp
+/home/bnibret/myprojects/betty_quan/src/parser.hpp
 iostream
 -
 sstream

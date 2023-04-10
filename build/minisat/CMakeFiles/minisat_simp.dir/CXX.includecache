@@ -152,19 +152,19 @@ sys/resource.h
 unistd.h
 -
 
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/Main.cc
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/Main.cc
 errno.h
 -
 zlib.h
 -
 minisat/utils/System.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/minisat/utils/System.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/minisat/utils/System.h
 minisat/utils/ParseUtils.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/minisat/utils/ParseUtils.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/minisat/utils/ParseUtils.h
 minisat/utils/Options.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/minisat/utils/Options.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/minisat/utils/Options.h
 minisat/core/Dimacs.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/minisat/core/Dimacs.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/minisat/core/Dimacs.h
 minisat/simp/SimpSolver.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp/minisat/simp/SimpSolver.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/simp/minisat/simp/SimpSolver.h
 

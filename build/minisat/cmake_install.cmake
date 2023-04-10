@@ -1,4 +1,4 @@
-# Install script for directory: /home/bnibret/myprojects/project_final/betty_quan/minisat
+# Install script for directory: /home/bnibret/myprojects/betty_quan/minisat
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/libminisat.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/bnibret/myprojects/betty_quan/build/minisat/libminisat.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -54,8 +54,8 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     endif()
   endforeach()
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES
-    "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/libminisat.so.2.1.0"
-    "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/libminisat.so.2"
+    "/home/bnibret/myprojects/betty_quan/build/minisat/libminisat.so.2.1.0"
+    "/home/bnibret/myprojects/betty_quan/build/minisat/libminisat.so.2"
     )
   foreach(file
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libminisat.so.2.1.0"
@@ -77,7 +77,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libminisat.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/libminisat.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/bnibret/myprojects/betty_quan/build/minisat/libminisat.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libminisat.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libminisat.so")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -93,7 +93,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/minisat_core"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/minisat_core")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/bnibret/myprojects/betty_quan/build/minisat/minisat_core")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/minisat_core" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/minisat_core")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -109,7 +109,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/minisat"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/bnibret/myprojects/project_final/betty_quan/build/minisat/minisat")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/bnibret/myprojects/betty_quan/build/minisat/minisat")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/minisat" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/minisat")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -120,10 +120,10 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/minisat" TYPE DIRECTORY FILES
-    "/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/mtl"
-    "/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/utils"
-    "/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core"
-    "/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/simp"
+    "/home/bnibret/myprojects/betty_quan/minisat/minisat/mtl"
+    "/home/bnibret/myprojects/betty_quan/minisat/minisat/utils"
+    "/home/bnibret/myprojects/betty_quan/minisat/minisat/core"
+    "/home/bnibret/myprojects/betty_quan/minisat/minisat/simp"
     FILES_MATCHING REGEX "/[^/]*\\.h$")
 endif()
 

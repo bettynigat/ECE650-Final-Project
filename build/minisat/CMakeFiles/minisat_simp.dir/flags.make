@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
 
-CXX_INCLUDES = -I/home/bnibret/myprojects/project_final/betty_quan/minisat 
+CXX_INCLUDES = -I/home/bnibret/myprojects/betty_quan/minisat 
 

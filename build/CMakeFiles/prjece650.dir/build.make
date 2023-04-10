@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/bnibret/myprojects/project_final/betty_quan
+CMAKE_SOURCE_DIR = /home/bnibret/myprojects/betty_quan
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/bnibret/myprojects/project_final/betty_quan/build
+CMAKE_BINARY_DIR = /home/bnibret/myprojects/betty_quan/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/prjece650.dir/depend.make
@@ -59,55 +59,55 @@ include CMakeFiles/prjece650.dir/flags.make
 
 CMakeFiles/prjece650.dir/prjece650.cpp.o: CMakeFiles/prjece650.dir/flags.make
 CMakeFiles/prjece650.dir/prjece650.cpp.o: ../prjece650.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bnibret/myprojects/project_final/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/prjece650.dir/prjece650.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prjece650.dir/prjece650.cpp.o -c /home/bnibret/myprojects/project_final/betty_quan/prjece650.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bnibret/myprojects/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/prjece650.dir/prjece650.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prjece650.dir/prjece650.cpp.o -c /home/bnibret/myprojects/betty_quan/prjece650.cpp
 
 CMakeFiles/prjece650.dir/prjece650.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prjece650.dir/prjece650.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bnibret/myprojects/project_final/betty_quan/prjece650.cpp > CMakeFiles/prjece650.dir/prjece650.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bnibret/myprojects/betty_quan/prjece650.cpp > CMakeFiles/prjece650.dir/prjece650.cpp.i
 
 CMakeFiles/prjece650.dir/prjece650.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prjece650.dir/prjece650.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bnibret/myprojects/project_final/betty_quan/prjece650.cpp -o CMakeFiles/prjece650.dir/prjece650.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bnibret/myprojects/betty_quan/prjece650.cpp -o CMakeFiles/prjece650.dir/prjece650.cpp.s
 
 CMakeFiles/prjece650.dir/src/graph.cpp.o: CMakeFiles/prjece650.dir/flags.make
 CMakeFiles/prjece650.dir/src/graph.cpp.o: ../src/graph.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bnibret/myprojects/project_final/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/prjece650.dir/src/graph.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prjece650.dir/src/graph.cpp.o -c /home/bnibret/myprojects/project_final/betty_quan/src/graph.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bnibret/myprojects/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/prjece650.dir/src/graph.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prjece650.dir/src/graph.cpp.o -c /home/bnibret/myprojects/betty_quan/src/graph.cpp
 
 CMakeFiles/prjece650.dir/src/graph.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prjece650.dir/src/graph.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bnibret/myprojects/project_final/betty_quan/src/graph.cpp > CMakeFiles/prjece650.dir/src/graph.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bnibret/myprojects/betty_quan/src/graph.cpp > CMakeFiles/prjece650.dir/src/graph.cpp.i
 
 CMakeFiles/prjece650.dir/src/graph.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prjece650.dir/src/graph.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bnibret/myprojects/project_final/betty_quan/src/graph.cpp -o CMakeFiles/prjece650.dir/src/graph.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bnibret/myprojects/betty_quan/src/graph.cpp -o CMakeFiles/prjece650.dir/src/graph.cpp.s
 
 CMakeFiles/prjece650.dir/src/linkedlist.cpp.o: CMakeFiles/prjece650.dir/flags.make
 CMakeFiles/prjece650.dir/src/linkedlist.cpp.o: ../src/linkedlist.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bnibret/myprojects/project_final/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/prjece650.dir/src/linkedlist.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prjece650.dir/src/linkedlist.cpp.o -c /home/bnibret/myprojects/project_final/betty_quan/src/linkedlist.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bnibret/myprojects/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/prjece650.dir/src/linkedlist.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prjece650.dir/src/linkedlist.cpp.o -c /home/bnibret/myprojects/betty_quan/src/linkedlist.cpp
 
 CMakeFiles/prjece650.dir/src/linkedlist.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prjece650.dir/src/linkedlist.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bnibret/myprojects/project_final/betty_quan/src/linkedlist.cpp > CMakeFiles/prjece650.dir/src/linkedlist.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bnibret/myprojects/betty_quan/src/linkedlist.cpp > CMakeFiles/prjece650.dir/src/linkedlist.cpp.i
 
 CMakeFiles/prjece650.dir/src/linkedlist.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prjece650.dir/src/linkedlist.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bnibret/myprojects/project_final/betty_quan/src/linkedlist.cpp -o CMakeFiles/prjece650.dir/src/linkedlist.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bnibret/myprojects/betty_quan/src/linkedlist.cpp -o CMakeFiles/prjece650.dir/src/linkedlist.cpp.s
 
 CMakeFiles/prjece650.dir/src/parser.cpp.o: CMakeFiles/prjece650.dir/flags.make
 CMakeFiles/prjece650.dir/src/parser.cpp.o: ../src/parser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bnibret/myprojects/project_final/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/prjece650.dir/src/parser.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prjece650.dir/src/parser.cpp.o -c /home/bnibret/myprojects/project_final/betty_quan/src/parser.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bnibret/myprojects/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/prjece650.dir/src/parser.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/prjece650.dir/src/parser.cpp.o -c /home/bnibret/myprojects/betty_quan/src/parser.cpp
 
 CMakeFiles/prjece650.dir/src/parser.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/prjece650.dir/src/parser.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bnibret/myprojects/project_final/betty_quan/src/parser.cpp > CMakeFiles/prjece650.dir/src/parser.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bnibret/myprojects/betty_quan/src/parser.cpp > CMakeFiles/prjece650.dir/src/parser.cpp.i
 
 CMakeFiles/prjece650.dir/src/parser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/prjece650.dir/src/parser.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bnibret/myprojects/project_final/betty_quan/src/parser.cpp -o CMakeFiles/prjece650.dir/src/parser.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bnibret/myprojects/betty_quan/src/parser.cpp -o CMakeFiles/prjece650.dir/src/parser.cpp.s
 
 # Object files for target prjece650
 prjece650_OBJECTS = \
@@ -127,7 +127,7 @@ prjece650: CMakeFiles/prjece650.dir/build.make
 prjece650: minisat/libminisat.a
 prjece650: /usr/lib/x86_64-linux-gnu/libz.so
 prjece650: CMakeFiles/prjece650.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bnibret/myprojects/project_final/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable prjece650"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bnibret/myprojects/betty_quan/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable prjece650"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/prjece650.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -140,6 +140,6 @@ CMakeFiles/prjece650.dir/clean:
 .PHONY : CMakeFiles/prjece650.dir/clean
 
 CMakeFiles/prjece650.dir/depend:
-	cd /home/bnibret/myprojects/project_final/betty_quan/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/bnibret/myprojects/project_final/betty_quan /home/bnibret/myprojects/project_final/betty_quan /home/bnibret/myprojects/project_final/betty_quan/build /home/bnibret/myprojects/project_final/betty_quan/build /home/bnibret/myprojects/project_final/betty_quan/build/CMakeFiles/prjece650.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/bnibret/myprojects/betty_quan/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/bnibret/myprojects/betty_quan /home/bnibret/myprojects/betty_quan /home/bnibret/myprojects/betty_quan/build /home/bnibret/myprojects/betty_quan/build /home/bnibret/myprojects/betty_quan/build/CMakeFiles/prjece650.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/prjece650.dir/depend
 

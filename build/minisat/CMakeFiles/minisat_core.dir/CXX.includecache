@@ -142,19 +142,19 @@ sys/resource.h
 unistd.h
 -
 
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/Main.cc
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/Main.cc
 errno.h
 -
 zlib.h
 -
 minisat/utils/System.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/utils/System.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/utils/System.h
 minisat/utils/ParseUtils.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/utils/ParseUtils.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/utils/ParseUtils.h
 minisat/utils/Options.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/utils/Options.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/utils/Options.h
 minisat/core/Dimacs.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/core/Dimacs.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/core/Dimacs.h
 minisat/core/Solver.h
-/home/bnibret/myprojects/project_final/betty_quan/minisat/minisat/core/minisat/core/Solver.h
+/home/bnibret/myprojects/betty_quan/minisat/minisat/core/minisat/core/Solver.h
 

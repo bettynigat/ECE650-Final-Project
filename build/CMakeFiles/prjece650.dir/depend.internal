@@ -18,7 +18,7 @@ CMakeFiles/prjece650.dir/prjece650.cpp.o
  ../minisat/minisat/mtl/XAlloc.h
  ../minisat/minisat/utils/Options.h
  ../minisat/minisat/utils/ParseUtils.h
- /home/bnibret/myprojects/project_final/betty_quan/prjece650.cpp
+ /home/bnibret/myprojects/betty_quan/prjece650.cpp
 CMakeFiles/prjece650.dir/src/graph.cpp.o
  ../include/constants.hpp
  ../include/graph.hpp
@@ -35,10 +35,10 @@ CMakeFiles/prjece650.dir/src/graph.cpp.o
  ../minisat/minisat/mtl/XAlloc.h
  ../minisat/minisat/utils/Options.h
  ../minisat/minisat/utils/ParseUtils.h
- /home/bnibret/myprojects/project_final/betty_quan/src/graph.cpp
+ /home/bnibret/myprojects/betty_quan/src/graph.cpp
 CMakeFiles/prjece650.dir/src/linkedlist.cpp.o
  ../include/linkedlist.hpp
- /home/bnibret/myprojects/project_final/betty_quan/src/linkedlist.cpp
+ /home/bnibret/myprojects/betty_quan/src/linkedlist.cpp
 CMakeFiles/prjece650.dir/src/parser.cpp.o
  ../include/constants.hpp
  ../include/graph.hpp
@@ -56,4 +56,4 @@ CMakeFiles/prjece650.dir/src/parser.cpp.o
  ../minisat/minisat/mtl/XAlloc.h
  ../minisat/minisat/utils/Options.h
  ../minisat/minisat/utils/ParseUtils.h
- /home/bnibret/myprojects/project_final/betty_quan/src/parser.cpp
+ /home/bnibret/myprojects/betty_quan/src/parser.cpp
