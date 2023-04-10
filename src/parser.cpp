@@ -196,7 +196,7 @@ void CommandHandler::save_data() {
         double refined_1_ratio = 0;
         double refined_2_ratio = 0;
         
-        myfile << "CNF-SAT-VC CNF-3-SAT-VC APPROX-VC-1 APPROX-VC-2 REFINED-APPROX-VC-1 REFINED-APPROX-VC-2\n"; 
+        // myfile << "CNF-SAT-VC CNF-3-SAT-VC APPROX-VC-1 APPROX-VC-2 REFINED-APPROX-VC-1 REFINED-APPROX-VC-2\n"; 
         for (int i = 0;i<matrix.size();i++) {
             std::vector<double> data = matrix[i];
             for (int j=0;j<data.size();j++) {
@@ -256,7 +256,7 @@ void CommandHandler::save_data() {
             refined_1_average = refined_1_average/matrix.size();
             refined_2_average = refined_2_average/matrix.size();
 
-            myfile << "Mean after " << std::to_string(matrix.size()) << " runs:";
+            // myfile << "Mean after " << std::to_string(matrix.size()) << " runs:";
             myfile << std::to_string(cnf_average) << " " << std::to_string(cnf_3_average) << " " << std::to_string(approx_1_average) << " " << std::to_string(approx_2_average) << " " << std::to_string(refined_1_average) << " " << std::to_string(refined_2_average) << " " << std::endl;
             
             
@@ -296,7 +296,7 @@ void CommandHandler::save_data() {
             refined_2_variance = std::sqrt(refined_2_variance);
 
             //calculate stadard deviation
-            myfile << "Standard deviation after " << std::to_string(matrix.size()) << " runs:";
+            // myfile << "Standard deviation after " << std::to_string(matrix.size()) << " runs:";
             myfile << std::to_string(cnf_variance) << " " << std::to_string(cnf_3_variance) << " " << std::to_string(approx_1_variance) << " " << std::to_string(approx_2_variance) << " " << std::to_string(refined_1_variance) << " " << std::to_string(refined_2_variance) << " " << std::endl;
 
             // myfile << "Approximation ratio's standard deviation after " << std::to_string(matrix.size()) << " runs:";
@@ -309,8 +309,8 @@ void CommandHandler::save_data() {
             refined_1_ratio = refined_1_ratio/matrix_cv.size();
             refined_2_ratio = refined_2_ratio/matrix_cv.size();
 
-            myfile << "Approx ratio after " << std::to_string(matrix_cv.size()) << " runs:";
-            myfile << std::to_string(approx_1_ratio) << " " << std::to_string(approx_2_ratio) << " " << std::to_string(refined_1_ratio) << " " << std::to_string(refined_2_ratio) << std::endl;
+            // myfile << "Approx ratio after " << std::to_string(matrix_cv.size()) << " runs:";
+            myfile <<"1"<< " "<< "1"<< " "<< std::to_string(approx_1_ratio) << " " << std::to_string(approx_2_ratio) << " " << std::to_string(refined_1_ratio) << " " << std::to_string(refined_2_ratio) << std::endl;
 
         }
 
