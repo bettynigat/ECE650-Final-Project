@@ -1,1 +1,0 @@
-/usr/bin/c++  -std=c++11 -Wall -pthread   -rdynamic CMakeFiles/prjece650.dir/prjece650.cpp.o CMakeFiles/prjece650.dir/src/graph.cpp.o CMakeFiles/prjece650.dir/src/linkedlist.cpp.o CMakeFiles/prjece650.dir/src/parser.cpp.o  -o prjece650  minisat/libminisat.a -lz 
