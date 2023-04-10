@@ -14,4 +14,4 @@ static const std::string approx_2_prefix = "APPROX-VC-2: ";
 static const std::string refined_1_prefix = "REFINED-APPROX-VC-1: ";
 static const std::string refined_2_prefix = "REFINED-APPROX-VC-2: ";
 static const std::string timeout = "timeout\n";
-static const double timeout_duration = 30; //in second
+static const double timeout_duration = 10; //in second
