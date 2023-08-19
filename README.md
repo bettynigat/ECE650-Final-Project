@@ -29,7 +29,7 @@ attached to u and v. Repeat till no edges remain. We will call this algorithm AP
 15. A refinement to APPROX-VC-2, which we will call REFINED-APPROX-VC-2. In the
 refinement, you take the output vertex cover of APPROX-VC-2 and throw away any
 vertices that are not needed. As for APPROX-VC-1, you can choose the vertices greedily.
-##Inputs
+## Inputs
 <br />
 <br />
 As input, use the output of /home/rbabaeec/ece650/graphGen/graphGen on ecetesla1. That
@@ -37,7 +37,7 @@ program generates graphs with the same number of edges for a particular number o
 not necessarily the same edges. Note that you can store its output in a file and use the file on other
 machines.
 <br />
-##Output
+## Output
 Given a graph as input, your program should output the vertex cover computed by each approach
 in sorted order. That is, give the following input:
 V 5
@@ -53,7 +53,7 @@ REFINED-APPROX-VC-2: 2,4
 That is, the name of the algorithm, followed by a colon ’:’, a single space, and then the computed
 result as a sorted sequence of vertices, separated by commas.
 <br />
-##Analysis
+## Analysis
 You should analyze how efficient each approach is, for various inputs. An input is characterized
 by the number of vertices. \Efficient" is characterized in one of two ways: (1) running time, and
 (2) approximation ratio. We characterize the approximation ratio as the ratio of the size of the
