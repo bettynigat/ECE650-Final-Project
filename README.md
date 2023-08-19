@@ -1,14 +1,13 @@
 # ECE650 : Final Project Instructions
 
 For the project you will need to:
-*Augment your code from Assignment 4 in the way that is described below.
-*Quantitatively analyze your software for various kinds of inputs
-<br />
+* Augment your code from Assignment 4 in the way that is described below.
+* Quantitatively analyze your software for various kinds of inputs
 you should augment your code from Assignment 4 in the following ways.
-*Make it multithreaded. You should have at least 7 threads: one for I/O, and one each for the
+* Make it multithreaded. You should have at least 7 threads: one for I/O, and one each for the
 different approaches to solve the minimum vertex cover problem. You may find the examples
 on https://git.uwaterloo.ca/ece650-1231/concurrency-demo useful.
-*Implement the following five additional ways to solve MIN-VERTEX-COVER, in addition
+* Implement the following five additional ways to solve MIN-VERTEX-COVER, in addition
 to the REDUCTION-TO-CNF-SAT approach you had in Assignment 4. (We will call your
 approach from Assignment 4, CNF-SAT-VC.)
 <br />
@@ -29,14 +28,12 @@ attached to u and v. Repeat till no edges remain. We will call this algorithm AP
 15. A refinement to APPROX-VC-2, which we will call REFINED-APPROX-VC-2. In the
 refinement, you take the output vertex cover of APPROX-VC-2 and throw away any
 vertices that are not needed. As for APPROX-VC-1, you can choose the vertices greedily.
+<br />
 ## Inputs
-<br />
-<br />
 As input, use the output of /home/rbabaeec/ece650/graphGen/graphGen on ecetesla1. That
 program generates graphs with the same number of edges for a particular number of vertices, but
 not necessarily the same edges. Note that you can store its output in a file and use the file on other
 machines.
-<br />
 ## Output
 Given a graph as input, your program should output the vertex cover computed by each approach
 in sorted order. That is, give the following input:
